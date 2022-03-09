@@ -1,4 +1,4 @@
-package com.example.tropical.decorator;
+package com.example.tropical.selenium.decorator;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -8,8 +8,7 @@ public class AdSalesMLResponseDecorator {
 
     public static String getNickName(String linkSeller){
         String fullLink = "https://www.mercadolivre.com.br/perfil/";
-        Integer lenght = fullLink.length();
-        System.out.println("tamanho do link: " + lenght );
+        int lenght = fullLink.length();
 
         String nickNameWithoutLink = linkSeller.substring(lenght - 4);
 

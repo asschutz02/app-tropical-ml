@@ -1,6 +1,6 @@
-package com.example.tropical.teste;
+package com.example.tropical.selenium;
 
-import com.example.tropical.model.AdSalesMLResponse;
+import com.example.tropical.selenium.model.AdSalesMLResponse;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import static com.example.tropical.decorator.AdSalesMLResponseDecorator.getNickName;
+import static com.example.tropical.selenium.decorator.AdSalesMLResponseDecorator.getNickName;
 import static javax.money.Monetary.getCurrency;
 
 public class SeleniumTester {
