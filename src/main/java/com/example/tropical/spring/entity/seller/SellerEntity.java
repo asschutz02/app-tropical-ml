@@ -1,17 +1,16 @@
-package com.example.tropical.spring.entity;
+package com.example.tropical.spring.entity.seller;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class TesteEntity {
+@Data
+public class SellerEntity {
 
-    private String name;
     private Integer id;
-    private Integer age;
+    private String name;
 }

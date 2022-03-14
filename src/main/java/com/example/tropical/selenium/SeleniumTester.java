@@ -197,8 +197,8 @@ public class SeleniumTester {
 
         WebElement input = webDriver.findElement(By.className("nav-search-input"));
 
-        input.sendKeys("bomba ac 20000 ocean");
-//        input.sendKeys("Bomba ac 6000 Ocean Tech");
+//        input.sendKeys("bomba ac 20000 ocean");
+        input.sendKeys("Bomba ac 6000 Ocean Tech");
 //        input.sendKeys("Nano ring bacterial 1 kg");
 
         WebElement btn = webDriver.findElement(By.className("nav-search-btn"));
@@ -288,10 +288,25 @@ public class SeleniumTester {
     private static List<String> getProductInfo(WebDriver webDriver) {
         List<String> links = new ArrayList<>();
 
-        List<WebElement> productLinks = webDriver.findElements(By.xpath("//a[contains(@class, 'ui-search-item__group__element ui-search-link')]"));
+        List<WebElement> productLinksGrid = webDriver.findElements(By.xpath("//a[contains(@class, 'ui-search-result__content ui-search-link')]"));
+
+        List<WebElement> productLinksLine = webDriver.findElements(By.xpath("//a[contains(@class, 'ui-search-item__group__element ui-search-link')]"));
+
+        if(productLinksGrid.size() > 0){
+            filterPrices(productLinksGrid, webDriver, links);
+        } else {
+            filterPrices(productLinksLine, webDriver, links);
+        }
+        return links;
+    }
+
+    private static void filterPrices(List<WebElement> productLinks, WebDriver webDriver, List<String> links){
         List<WebElement> allPrices = webDriver.findElements(By.xpath("//span[contains(@class, 'price-tag-fraction')]"));
 
+
         allPrices.removeIf(price -> !price.getCssValue("font-size").equals("24px"));
+
+        System.out.println("Tamanho link prices: " + allPrices.size());
 
         allPrices.forEach(priceML -> {
             CurrencyUnit real = getCurrency("BRL");
@@ -306,18 +321,16 @@ public class SeleniumTester {
 
                 if(productLinks.get(indexPrice).getAttribute("href").contains("MLB")) {
                     links.add(productLinks.get(indexPrice).getAttribute("href"));
-
                 }
             }
         });
-
-        return links;
     }
 
     private static Boolean comparePrice(MonetaryAmount moneyML, CurrencyUnit real){
 
-//        Double realPrice = 837.0;
-        Double realPrice = 1412.00;
+        Double realPrice = 837.0;
+//        Double realPrice = 78.00;
+//        Double realPrice = 1412.00;
         MonetaryAmount moneyReal = Money.of(realPrice, real);
 
         MonetaryAmount halfMoney = moneyReal.divide(2L);
