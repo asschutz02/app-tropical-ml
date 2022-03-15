@@ -15,7 +15,7 @@ public interface ProductsMapper {
     void insertProduct(@Param("products") ProductsEntity products);
 
     @Select("SELECT * FROM products")
-    List<ProductsEntity> findAll();
+    List<ProductsEntity> findAllProducts();
 
     @Select("SELECT * FROM products WHERE name=#{name};")
     ProductsEntity findByName(String name);

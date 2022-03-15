@@ -1,6 +1,9 @@
 package com.example.tropical.selenium;
 
 import com.example.tropical.selenium.model.AdSalesMLResponse;
+import com.example.tropical.spring.entity.products.ProductsEntity;
+import com.example.tropical.spring.mapper.products.ProductsMapper;
+import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -11,6 +14,8 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -30,21 +35,48 @@ import java.util.Properties;
 import static com.example.tropical.selenium.decorator.AdSalesMLResponseDecorator.getNickName;
 import static javax.money.Monetary.getCurrency;
 
+@AllArgsConstructor
+@Component
 public class SeleniumTester {
 
-    public static void main(String[] args) throws IOException {
+    private final ProductsMapper productsMapper;
 
-        String firstPage = searchProductByName();
+//    public static void main(String[] args) throws IOException {
 
-        List<String> links = linksPage(firstPage);
+//        String firstPage = searchProductByName();
+//
+//        List<String> links = linksPage(firstPage);
+//
+//        List<AdSalesMLResponse> relatorio = getProductsInfo(links);
+//
+//        System.out.println("relatório: " + relatorio);
+//
+//        createExcel(relatorio);
+//
+//        emailSender();
+//    }
 
-        List<AdSalesMLResponse> relatorio = getProductsInfo(links);
+    public void executeSelenium() {
+        System.out.println("Executando o programa");
+        List<ProductsEntity> products = this.productsMapper.findAllProducts();
 
-        System.out.println("relatório: " + relatorio);
+        products.forEach(product -> {
+            String firstPage = searchProductByName(product.getName());
 
-        createExcel(relatorio);
+            List<String> links = linksPage(firstPage);
 
-        emailSender();
+            List<AdSalesMLResponse> relatorio = getProductsInfo(links, product);
+
+            System.out.println("relatório: " + relatorio);
+
+            try {
+                createExcel(relatorio);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            emailSender();
+        });
     }
 
     private static void createExcel(List<AdSalesMLResponse> relatorio) throws IOException {
@@ -187,7 +219,7 @@ public class SeleniumTester {
         return pageLinks;
     }
 
-    private static String searchProductByName() {
+    private static String searchProductByName(String productName) {
 
         WebDriver webDriver = new ChromeDriver();
 
@@ -198,7 +230,8 @@ public class SeleniumTester {
         WebElement input = webDriver.findElement(By.className("nav-search-input"));
 
 //        input.sendKeys("bomba ac 20000 ocean");
-        input.sendKeys("Bomba ac 6000 Ocean Tech");
+//        input.sendKeys("Bomba ac 6000 Ocean Tech");
+        input.sendKeys(productName);
 //        input.sendKeys("Nano ring bacterial 1 kg");
 
         WebElement btn = webDriver.findElement(By.className("nav-search-btn"));
@@ -213,7 +246,7 @@ public class SeleniumTester {
 
     }
 
-    private static List<AdSalesMLResponse> getProductsInfo(List<String> pageLinks) {
+    private static List<AdSalesMLResponse> getProductsInfo(List<String> pageLinks, ProductsEntity products) {
 
         List<AdSalesMLResponse> finalList = new ArrayList<>();
 
@@ -223,7 +256,7 @@ public class SeleniumTester {
             webDriver.navigate().to(pgLink);
 
             try {
-                List<String> linksResult = getProductInfo(webDriver);
+                List<String> linksResult = getProductInfo(webDriver, products);
                 linksResult.forEach(link -> {
                     webDriver.navigate().to(link); //aqui pego link do anuncio
 
@@ -252,7 +285,7 @@ public class SeleniumTester {
                     finalList.add(adResponse);
                 });
             } catch (StaleElementReferenceException ex) {
-                List<String> linksResult = getProductInfo(webDriver);
+                List<String> linksResult = getProductInfo(webDriver, products);
                 linksResult.forEach(link -> {
                     webDriver.navigate().to(link); //aqui pego link do anuncio
 
@@ -285,7 +318,7 @@ public class SeleniumTester {
     }
 
 
-    private static List<String> getProductInfo(WebDriver webDriver) {
+    private static List<String> getProductInfo(WebDriver webDriver, ProductsEntity products) {
         List<String> links = new ArrayList<>();
 
         List<WebElement> productLinksGrid = webDriver.findElements(By.xpath("//a[contains(@class, 'ui-search-result__content ui-search-link')]"));
@@ -293,14 +326,14 @@ public class SeleniumTester {
         List<WebElement> productLinksLine = webDriver.findElements(By.xpath("//a[contains(@class, 'ui-search-item__group__element ui-search-link')]"));
 
         if(productLinksGrid.size() > 0){
-            filterPrices(productLinksGrid, webDriver, links);
+            filterPrices(productLinksGrid, webDriver, links, products);
         } else {
-            filterPrices(productLinksLine, webDriver, links);
+            filterPrices(productLinksLine, webDriver, links, products);
         }
         return links;
     }
 
-    private static void filterPrices(List<WebElement> productLinks, WebDriver webDriver, List<String> links){
+    private static void filterPrices(List<WebElement> productLinks, WebDriver webDriver, List<String> links, ProductsEntity products){
         List<WebElement> allPrices = webDriver.findElements(By.xpath("//span[contains(@class, 'price-tag-fraction')]"));
 
 
@@ -316,7 +349,7 @@ public class SeleniumTester {
 
             MonetaryAmount money = Money.of(price, real);
 
-            if(comparePrice(money, real)){
+            if(comparePrice(money, real, products.getPrice())){
                 int indexPrice = allPrices.indexOf(priceML);
 
                 if(productLinks.get(indexPrice).getAttribute("href").contains("MLB")) {
@@ -326,9 +359,10 @@ public class SeleniumTester {
         });
     }
 
-    private static Boolean comparePrice(MonetaryAmount moneyML, CurrencyUnit real){
+    private static Boolean comparePrice(MonetaryAmount moneyML, CurrencyUnit real, Double realPrice){
 
-        Double realPrice = 837.0;
+//        Double realPrice = 837.0;
+//        Double realPrice = 837.0;
 //        Double realPrice = 78.00;
 //        Double realPrice = 1412.00;
         MonetaryAmount moneyReal = Money.of(realPrice, real);

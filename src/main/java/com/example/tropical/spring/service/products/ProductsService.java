@@ -18,7 +18,7 @@ public class ProductsService {
     }
 
     public List<ProductsEntity> findAll(){
-        return productsMapper.findAll();
+        return productsMapper.findAllProducts();
     }
 
     public ProductsEntity findByName(String name) {
