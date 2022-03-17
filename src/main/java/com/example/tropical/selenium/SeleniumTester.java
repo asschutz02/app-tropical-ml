@@ -1,8 +1,12 @@
 package com.example.tropical.selenium;
 
 import com.example.tropical.selenium.model.AdSalesMLResponse;
+import com.example.tropical.spring.entity.nicknames.NicknamesEntity;
 import com.example.tropical.spring.entity.products.ProductsEntity;
+import com.example.tropical.spring.entity.seller.SellerEntity;
+import com.example.tropical.spring.mapper.nicknames.NicknamesMapper;
 import com.example.tropical.spring.mapper.products.ProductsMapper;
+import com.example.tropical.spring.mapper.seller.SellerMapper;
 import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -25,11 +29,13 @@ import javax.mail.internet.MimeMultipart;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 
 import static com.example.tropical.selenium.decorator.AdSalesMLResponseDecorator.getNickName;
@@ -40,6 +46,8 @@ import static javax.money.Monetary.getCurrency;
 public class SeleniumTester {
 
     private final ProductsMapper productsMapper;
+    private final SellerMapper sellerMapper;
+    private final NicknamesMapper nicknamesMapper;
 
 //    public static void main(String[] args) throws IOException {
 
@@ -59,44 +67,165 @@ public class SeleniumTester {
     public void executeSelenium() {
         System.out.println("Executando o programa");
         List<ProductsEntity> products = this.productsMapper.findAllProducts();
+        System.out.println("products: " + products);
+        List<AdSalesMLResponse> relatorio = new ArrayList<>();
 
         products.forEach(product -> {
             String firstPage = searchProductByName(product.getName());
 
             List<String> links = linksPage(firstPage);
 
-            List<AdSalesMLResponse> relatorio = getProductsInfo(links, product);
+            List<AdSalesMLResponse> relatorioIndividual = getProductsInfo(links, product);
 
-            System.out.println("relatório: " + relatorio);
-
-            try {
-                createExcel(relatorio);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            emailSender();
+            relatorio.addAll(relatorioIndividual);
         });
+
+        System.out.println("relatório: " + relatorio);
+        System.out.println("Tamanho do relatório: " + relatorio.size());
+
+        try {
+            createExcel(relatorio);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        emailSender();
     }
 
-    private static void createExcel(List<AdSalesMLResponse> relatorio) throws IOException {
+    private void createExcel(List<AdSalesMLResponse> relatorio) throws IOException {
+
+        //percorrer a lista de anuncios e a lista de nicknames;
+        //se o nickname for igual nas duas lista, pegar o index do nickname na sua lista;
+        //pegar o eveline respectivo aquele nickname e comparar com a lista de vendedores;
+        //se existir adicionar, se não criar aba desconhecido;
 
         XSSFWorkbook workbook = new XSSFWorkbook();
 
-        XSSFSheet vendedor = workbook.createSheet("Eveline");
+        List<SellerEntity> sellers = this.sellerMapper.findaAll();
+        List<NicknamesEntity> nicknames = this.nicknamesMapper.findaAll();
 
+//        sellers.forEach(seller -> {
+//            nicknames.forEach(nickname -> {
+                XSSFSheet eveline = workbook.createSheet("EVELINE");
+                XSSFSheet maciel = workbook.createSheet("MACIEL");
+                XSSFSheet paola = workbook.createSheet("PAOLA");
+                XSSFSheet rodrigoReis = workbook.createSheet("RODIRGO REIS");
+                XSSFSheet eleandro = workbook.createSheet("ELEANDRO");
+                XSSFSheet thomas = workbook.createSheet("THOMAS");
+                XSSFSheet diego = workbook.createSheet("DIEGO");
+                XSSFSheet willian = workbook.createSheet("WILLIAN");
+                XSSFSheet cesar = workbook.createSheet("CÉSAR");
+                XSSFSheet patrick = workbook.createSheet("PATRICK");
+                XSSFSheet augusto = workbook.createSheet("AUGUSTO");
+                XSSFSheet carlosEduardo = workbook.createSheet("CARLOS EDUARDO");
+                XSSFSheet rafael = workbook.createSheet("RAFAEL");
+                XSSFSheet desconhecido = workbook.createSheet("DESCONHECIDO");
+
+                relatorio.forEach(ad -> nicknames.forEach(nickname -> {
+                    if(ad.getNickNameSeller().equals(nickname.getNickname())) {
+                        Integer indexOfNickNameEqual = nicknames.indexOf(nickname);
+                        String vendedorTropical = nicknames.get(indexOfNickNameEqual).getCustomerBy();
+
+                        switch (vendedorTropical){
+                            case "Eveline":
+                                //logica
+                                populateExcel(eveline, ad);
+                                System.out.println("Eveline");
+                                break;
+                            case "Maciel":
+                                populateExcel(maciel, ad);
+                                System.out.println("Maciel");
+                                break;
+                            case "PAOLA":
+                                populateExcel(paola, ad);
+                                System.out.println("PAOLA");
+                                break;
+                            case "RODRIGO REIS":
+                                populateExcel(rodrigoReis, ad);
+                                System.out.println("RODRIGO REIS");
+                                break;
+                            case "ELEANDRO":
+                                populateExcel(eleandro, ad);
+                                System.out.println("ELEANDRO");
+                                break;
+                            case "THOMAS":
+                                populateExcel(thomas, ad);
+                                System.out.println("THOMAS");
+                                break;
+                            case "DIEGO":
+                                populateExcel(diego, ad);
+                                System.out.println("DIEGO");
+                                break;
+                            case "WILLIAN":
+                                populateExcel(willian, ad);
+                                System.out.println("WILLIAN");
+                                break;
+                            case "CÉSAR":
+                                populateExcel(cesar, ad);
+                                System.out.println("CÉSAR");
+                                break;
+                            case "PATRICK":
+                                populateExcel(patrick, ad);
+                                System.out.println("PATRICK");
+                                break;
+                            case "AUGUSTO":
+                                populateExcel(augusto, ad);
+                                System.out.println("AUGUSTO");
+                                break;
+                            case "CARLOS EDUARDO":
+                                populateExcel(carlosEduardo, ad);
+                                System.out.println("CARLOS EDUARDO");
+                                break;
+                            case "RAFAEL":
+                                populateExcel(rafael, ad);
+                                System.out.println("RAFAEL");
+                        }
+                    } else {
+                        populateExcel(desconhecido, ad);
+                        System.out.println("desconhecido");
+                        //LÓGICA DO DESCONHECIDO
+                    }
+                }));
+
+
+
+                FileOutputStream out = null;
+                try {
+                    out = new FileOutputStream("C:\\estudos_java\\teste.xlsx");
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    workbook.write(out);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+//            });
+//
+//        });
+
+    }
+
+    private static void populateExcel(XSSFSheet paginaDoExcel, AdSalesMLResponse adSalesMLResponse){
         List<String> titulos = new ArrayList<>();
-        titulos.add("PRODUTO");
-        titulos.add("LINK");
-        titulos.add("VALOR ANÚNCIO");
-        titulos.add("NICKNAME");
-        titulos.add("LINK ANUNCIANTE");
-        titulos.add("LOJA");
+                titulos.add("PRODUTO");
+                titulos.add("LINK");
+                titulos.add("VALOR ANÚNCIO");
+                titulos.add("NICKNAME");
+                titulos.add("LINK ANUNCIANTE");
+                titulos.add("LOJA");
 
-        int numLinha = 0; // representa o número da linha da planilha
+            int numLinha = 0; // representa o número da linha da planilha
 
-        // primeiro criamos a linha com os títulos
-        Row linha = vendedor.createRow(numLinha);
+    // primeiro criamos a linha com os títulos
+        Row linha = paginaDoExcel.createRow(numLinha);
+        numLinha++;
 
         for(int i = 0; i < titulos.size(); i++){
             // cria uma nova célula
@@ -104,38 +233,72 @@ public class SeleniumTester {
             celula.setCellValue(titulos.get(i));
         }
 
-        numLinha++;
+//        numLinha++;
 
-        for (AdSalesMLResponse adSalesMLResponse : relatorio) {
-            linha = vendedor.createRow(numLinha);
+        linha = paginaDoExcel.createRow(numLinha);
 
-            Cell celula = linha.createCell(0);
-            celula.setCellValue(adSalesMLResponse.getProductName());
+        Cell celula = linha.createCell(0);
+        celula.setCellValue(adSalesMLResponse.getProductName());
 
-            celula = linha.createCell(1);
-            celula.setCellValue(adSalesMLResponse.getLinkAd());
+        celula = linha.createCell(1);
+        celula.setCellValue(adSalesMLResponse.getLinkAd());
 
-            celula = linha.createCell(2);
+        celula = linha.createCell(2);
+        if(!Objects.isNull(adSalesMLResponse.getPrice())){
             celula.setCellValue(adSalesMLResponse.getPrice());
-
-            celula = linha.createCell(3);
-            celula.setCellValue(adSalesMLResponse.getNickNameSeller());
-
-            celula = linha.createCell(4);
-            celula.setCellValue(adSalesMLResponse.getLinkSeller());
-
-//            celula = linha.createCell(5);
-//            celula.setCellValue(response.getProductName());
-
-            numLinha++;
         }
 
-        FileOutputStream out = new FileOutputStream("C:\\estudos_java\\teste.xlsx");
+        celula = linha.createCell(3);
+        celula.setCellValue(adSalesMLResponse.getNickNameSeller());
 
-        workbook.write(out);
-        out.close();
-
+        celula = linha.createCell(4);
+        celula.setCellValue(adSalesMLResponse.getLinkSeller());
     }
+
+//    List<String> titulos = new ArrayList<>();
+//                titulos.add("PRODUTO");
+//                titulos.add("LINK");
+//                titulos.add("VALOR ANÚNCIO");
+//                titulos.add("NICKNAME");
+//                titulos.add("LINK ANUNCIANTE");
+//                titulos.add("LOJA");
+//
+//    int numLinha = 0; // representa o número da linha da planilha
+//
+//    // primeiro criamos a linha com os títulos
+//    Row linha = eveline.createRow(numLinha);
+//
+//                for(int i = 0; i < titulos.size(); i++){
+//        // cria uma nova célula
+//        Cell celula = linha.createCell(i);
+//        celula.setCellValue(titulos.get(i));
+//    }
+//
+//    numLinha++;
+//
+//                for (AdSalesMLResponse adSalesMLResponse : relatorio) {
+////                    if(adSalesMLResponse.getNickNameSeller().equals(nickname.getNickname()))
+//        linha = eveline.createRow(numLinha);
+//
+//        Cell celula = linha.createCell(0);
+//        celula.setCellValue(adSalesMLResponse.getProductName());
+//
+//        celula = linha.createCell(1);
+//        celula.setCellValue(adSalesMLResponse.getLinkAd());
+//
+//        celula = linha.createCell(2);
+//        if(!Objects.isNull(adSalesMLResponse.getPrice())){
+//            celula.setCellValue(adSalesMLResponse.getPrice());
+//        }
+//
+//        celula = linha.createCell(3);
+//        celula.setCellValue(adSalesMLResponse.getNickNameSeller());
+//
+//        celula = linha.createCell(4);
+//        celula.setCellValue(adSalesMLResponse.getLinkSeller());
+//
+//        numLinha++;
+//    }
 
     private static void emailSender(){
         Properties props = new Properties();

@@ -12,7 +12,7 @@ public class SeleniumExecuter {
     private final SeleniumTester seleniumTester;
 
 //    @Scheduled(cron = "0 0 0/6 ? * * *", zone = TIME_ZONE) //certo
-    @Scheduled(cron = "0 */2 * ? * *")
+    @Scheduled(cron = "0 */5 * ? * *")
     public void executeApp(){
         this.seleniumTester.executeSelenium();
     }
