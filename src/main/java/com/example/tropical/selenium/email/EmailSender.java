@@ -1,5 +1,7 @@
 package com.example.tropical.selenium.email;
 
+import org.springframework.stereotype.Component;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
@@ -9,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
+@Component
 public class EmailSender {
 
     public static void emailSender(){

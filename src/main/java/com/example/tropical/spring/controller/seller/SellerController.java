@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RequestMapping("/tropical/sellers")
 @RestController
 @AllArgsConstructor
@@ -16,6 +17,7 @@ public class SellerController {
 
     @PostMapping()
     public void insertSeller(@RequestBody SellerEntity seller){
+        System.out.println("request: " + seller);
         sellerService.insertSeller(seller);
     }
 

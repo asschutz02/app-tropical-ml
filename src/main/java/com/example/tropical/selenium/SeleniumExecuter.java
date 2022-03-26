@@ -79,7 +79,7 @@ public class SeleniumExecuter {
         emailSender();
     }
 
-    private static List<String> linksPage(String firstPage) {
+    public static List<String> linksPage(String firstPage) {
 
         WebDriver webDriver = new ChromeDriver();
 
@@ -118,6 +118,8 @@ public class SeleniumExecuter {
 
     public static String searchProductByName(String productName) {
 
+        System.out.println("nome dentro do método: " + productName);
+
         WebDriver webDriver = new ChromeDriver();
 
         String baseUrl = "https://www.mercadolivre.com.br/";
@@ -143,7 +145,7 @@ public class SeleniumExecuter {
 
     }
 
-    private static List<AdSalesMLResponse> getProductsInfo(List<String> pageLinks, ProductsEntity products) {
+    public static List<AdSalesMLResponse> getProductsInfo(List<String> pageLinks, ProductsEntity products) {
 
         List<AdSalesMLResponse> finalList = new ArrayList<>();
 

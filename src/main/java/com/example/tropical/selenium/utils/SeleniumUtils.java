@@ -31,6 +31,7 @@ public final class SeleniumUtils {
 
             MonetaryAmount money = Money.of(price, real);
 
+
             if(comparePrice(money, real, products.getPrice())){
                 int indexPrice = allPrices.indexOf(priceML);
 

@@ -6,6 +6,7 @@ import com.example.tropical.spring.mapper.nicknames.NicknamesMapper;
 import lombok.AllArgsConstructor;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Component;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 import static com.example.tropical.selenium.excel.helper.ExcelHelper.populateExcel;
 
 @AllArgsConstructor
+@Component
 public final class ExcelExecuter {
 
     private final NicknamesMapper nicknamesMapper;
