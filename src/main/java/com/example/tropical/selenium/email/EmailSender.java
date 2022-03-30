@@ -9,6 +9,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
 @Component
@@ -42,10 +44,13 @@ public class EmailSender {
                     .parse("arthur.schutz123@gmail.com");
 
             message.setRecipients(Message.RecipientType.TO, toUser);
-            message.setSubject("Enviando email com JavaMail");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+            String dataFormatada = now.format(formatter);
+            message.setSubject("Planilha Relatório Mercado Livre - " + dataFormatada);
 
             MimeBodyPart attachmentPart = new MimeBodyPart();
-            attachmentPart.attachFile(new File("C:\\estudos_java\\teste.xlsx"));
+            attachmentPart.attachFile(new File("tropical-ml.xlsx"));
 
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(attachmentPart);

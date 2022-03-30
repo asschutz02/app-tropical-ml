@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -26,7 +27,17 @@ public class ProductsService {
     }
 
     public void updateProduct(ProductsEntity products, String name){
-        productsMapper.updateProduct(products, name);
+        if(Objects.isNull(products.getPrice())){
+            ProductsEntity product = findByName(name);
+            products.setPrice(product.getPrice());
+            productsMapper.updateProduct(products, name);
+        } else if(Objects.isNull(products.getName())) {
+            ProductsEntity product = findByName(name);
+            products.setName(product.getName());
+            productsMapper.updateProduct(products, name);
+        } else {
+            productsMapper.updateProduct(products, name);
+        }
     }
 
     public void deleteProduct(String name){

@@ -25,10 +25,6 @@ public final class SeleniumHelper {
 
     public static Boolean comparePrice(MonetaryAmount moneyML, CurrencyUnit real, Double realPrice){
 
-//        Double realPrice = 837.0;
-//        Double realPrice = 837.0;
-//        Double realPrice = 78.00;
-//        Double realPrice = 1412.00;
         MonetaryAmount moneyReal = Money.of(realPrice, real);
 
         MonetaryAmount halfMoney = moneyReal.divide(2L);

@@ -1,6 +1,5 @@
 package com.example.tropical.selenium.utils;
 
-import com.example.tropical.spring.entity.products.ProductsEntity;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.javamoney.moneta.Money;
@@ -18,7 +17,7 @@ import static javax.money.Monetary.getCurrency;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SeleniumUtils {
 
-    public static void filterPrices(List<WebElement> productLinks, WebDriver webDriver, List<String> links, ProductsEntity products){
+    public static void filterPrices(List<WebElement> productLinks, WebDriver webDriver, List<String> links, Double priceProduct){
         List<WebElement> allPrices = precosProdutosLink(webDriver);
 
         allPrices.removeIf(price -> !price.getCssValue("font-size").equals("24px"));
@@ -32,7 +31,7 @@ public final class SeleniumUtils {
             MonetaryAmount money = Money.of(price, real);
 
 
-            if(comparePrice(money, real, products.getPrice())){
+            if(comparePrice(money, real, priceProduct)){
                 int indexPrice = allPrices.indexOf(priceML);
 
                 if(productLinks.get(indexPrice).getAttribute("href").contains("MLB")) {

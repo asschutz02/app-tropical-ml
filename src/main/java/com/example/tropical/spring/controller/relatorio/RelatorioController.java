@@ -1,4 +1,4 @@
-package com.example.tropical.spring.controller.relatório;
+package com.example.tropical.spring.controller.relatorio;
 
 import com.example.tropical.spring.service.relatório.RelatorioService;
 import lombok.AllArgsConstructor;

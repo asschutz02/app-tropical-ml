@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -26,7 +27,17 @@ public class NicknamesService {
     }
 
     public void updateNickname(NicknamesEntity nicknamesEntity, String nickname){
-        nicknamesMapper.updateNickname(nicknamesEntity, nickname);
+        if(Objects.isNull(nicknamesEntity.getNickname())){
+            NicknamesEntity nick = findByNickname(nickname);
+            nicknamesEntity.setNickname(nick.getNickname());
+            nicknamesMapper.updateNickname(nicknamesEntity, nickname);
+        } else if(Objects.isNull(nicknamesEntity.getCustomerBy())) {
+            NicknamesEntity nick = findByNickname(nickname);
+            nicknamesEntity.setCustomerBy(nick.getCustomerBy());
+            nicknamesMapper.updateNickname(nicknamesEntity, nickname);
+        } else {
+            nicknamesMapper.updateNickname(nicknamesEntity, nickname);
+        }
     }
 
     public void deleteNickname(String nickname){

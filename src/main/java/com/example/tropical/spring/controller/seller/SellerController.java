@@ -17,7 +17,6 @@ public class SellerController {
 
     @PostMapping()
     public void insertSeller(@RequestBody SellerEntity seller){
-        System.out.println("request: " + seller);
         sellerService.insertSeller(seller);
     }
 

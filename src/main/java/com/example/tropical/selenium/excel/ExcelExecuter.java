@@ -31,7 +31,7 @@ public final class ExcelExecuter {
         XSSFSheet eveline = workbook.createSheet("EVELINE");
         XSSFSheet maciel = workbook.createSheet("MACIEL");
         XSSFSheet paola = workbook.createSheet("PAOLA");
-        XSSFSheet rodrigoReis = workbook.createSheet("RODIRGO REIS");
+        XSSFSheet rodrigoReis = workbook.createSheet("RODRIGO REIS");
         XSSFSheet eleandro = workbook.createSheet("ELEANDRO");
         XSSFSheet thomas = workbook.createSheet("THOMAS");
         XSSFSheet diego = workbook.createSheet("DIEGO");
@@ -51,47 +51,49 @@ public final class ExcelExecuter {
 
             if (!objFiltrado.isEmpty()) {
 
-                Integer indexOfNickNameEqual = nicknames.indexOf(objFiltrado.get(0));
+                int indexOfNickNameEqual = nicknames.indexOf(objFiltrado.get(0));
                 String vendedorTropical = nicknames.get(indexOfNickNameEqual).getCustomerBy();
 
+                System.out.println(vendedorTropical);
+
                 switch (vendedorTropical) {
-                    case "Eveline":
+                    case "eveline":
                         populateExcel(eveline, ad, workbook);
                         break;
-                    case "Maciel":
+                    case "maciel":
                         populateExcel(maciel, ad, workbook);
                         break;
-                    case "PAOLA":
+                    case "paola":
                         populateExcel(paola, ad, workbook);
                         break;
-                    case "RODRIGO REIS":
+                    case "rodrigo reis":
                         populateExcel(rodrigoReis, ad, workbook);
                         break;
-                    case "ELEANDRO":
+                    case "eleandro":
                         populateExcel(eleandro, ad, workbook);
                         break;
-                    case "THOMAS":
+                    case "thomas":
                         populateExcel(thomas, ad, workbook);
                         break;
-                    case "DIEGO":
+                    case "diego":
                         populateExcel(diego, ad, workbook);
                         break;
-                    case "WILLIAN":
+                    case "willian":
                         populateExcel(willian, ad, workbook);
                         break;
-                    case "CÉSAR":
+                    case "cesar":
                         populateExcel(cesar, ad, workbook);
                         break;
-                    case "PATRICK":
+                    case "patrick":
                         populateExcel(patrick, ad, workbook);
                         break;
-                    case "AUGUSTO":
+                    case "augusto":
                         populateExcel(augusto, ad, workbook);
                         break;
-                    case "CARLOS EDUARDO":
+                    case "carlos eduardo":
                         populateExcel(carlosEduardo, ad, workbook);
                         break;
-                    case "RAFAEL":
+                    case "rafael":
                         populateExcel(rafael, ad, workbook);
                 }
                 objFiltrado.clear();
@@ -100,11 +102,9 @@ public final class ExcelExecuter {
             }
         });
 
-
-
         FileOutputStream out = null;
         try {
-            out = new FileOutputStream("C:\\estudos_java\\teste.xlsx");
+            out = new FileOutputStream("tropical-ml.xlsx");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -115,6 +115,7 @@ public final class ExcelExecuter {
             e.printStackTrace();
         }
         try {
+            assert out != null;
             out.close();
         } catch (IOException e) {
             e.printStackTrace();

@@ -14,8 +14,8 @@ public class SearchController {
 
     private final SearchService service;
 
-    @GetMapping("/{productName}")
-    public void searchProduct(@PathVariable String productName) throws IOException {
-        service.searchProduct(productName);
+    @GetMapping("/{productName}/price/{price}")
+    public void searchProduct(@PathVariable String productName, @PathVariable Double price) throws IOException {
+        service.searchProduct(productName, price);
     }
 }

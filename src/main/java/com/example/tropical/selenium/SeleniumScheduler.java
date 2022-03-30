@@ -11,8 +11,8 @@ public class SeleniumScheduler {
     private static final String TIME_ZONE = "America/Sao_Paulo";
     private final SeleniumExecuter seleniumExecuter;
 
-//    @Scheduled(cron = "0 0 0/6 ? * * *", zone = TIME_ZONE) //certo
-//    @Scheduled(cron = "0 */5 * ? * *")
+//    @Scheduled(cron = "0 0 0/6 ? * * *", zone = TIME_ZONE)
+    @Scheduled(cron = "0 */5 * ? * *", zone = TIME_ZONE)
     public void executeApp(){
         this.seleniumExecuter.executeSelenium();
     }

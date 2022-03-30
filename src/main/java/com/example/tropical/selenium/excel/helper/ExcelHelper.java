@@ -19,7 +19,7 @@ public class ExcelHelper {
         titulos.add("LINK ANUNCIANTE");
         titulos.add("LOJA");
 
-        Integer tamanhoDaPagina = paginaDoExcel.getPhysicalNumberOfRows();
+        int tamanhoDaPagina = paginaDoExcel.getPhysicalNumberOfRows();
 
         int numLinha;
 
@@ -36,16 +36,12 @@ public class ExcelHelper {
             numLinha++;
 
             for (int i = 0; i < titulos.size(); i++) {
-                // cria uma nova célula
                 Cell celula = linha.createCell(i);
 
                 CellStyle cellStyle = workbook.createCellStyle();
                 paginaDoExcel.setColumnWidth(0, 3);
                 cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
                 cellStyle.setAlignment(HorizontalAlignment.CENTER);
-
-//                XSSFColor myColor = new XSSFColor((IndexedColorMap) Color.RED);
-//                cellStyle.setFillBackgroundColor(myColor);
 
                 celula.setCellValue(titulos.get(i));
             }
