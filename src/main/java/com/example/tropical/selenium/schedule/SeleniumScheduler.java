@@ -1,5 +1,6 @@
-package com.example.tropical.selenium;
+package com.example.tropical.selenium.schedule;
 
+import com.example.tropical.selenium.SeleniumExecuter;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
