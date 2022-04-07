@@ -10,6 +10,7 @@ import javax.mail.internet.MimeMultipart;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
@@ -31,7 +32,7 @@ public class EmailSender {
                     protected PasswordAuthentication getPasswordAuthentication()
                     {
                         return new PasswordAuthentication("arthurschutzdasilva@gmail.com",
-                                "arthurschutz2002");
+                                "rjalevyscnrdbswe");
                     }
                 });
 
@@ -45,7 +46,7 @@ public class EmailSender {
 
             message.setRecipients(Message.RecipientType.TO, toUser);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime now = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
             String dataFormatada = now.format(formatter);
             message.setSubject("Planilha Relatório Mercado Livre - " + dataFormatada);
 

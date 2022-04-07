@@ -9,6 +9,7 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -94,6 +95,13 @@ public class SeleniumExecuter {
     public static String searchProductByName(String productName) {
 
         System.out.println("nome dentro do método: " + productName);
+        System.setProperty("webdriver.chrome.driver", "chromedriver");
+
+
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("headless");
+        options.addArguments("--no-sandbox");
+
 
         WebDriver webDriver = new ChromeDriver();
 
@@ -122,6 +130,7 @@ public class SeleniumExecuter {
         List<AdSalesMLResponse> finalList = new ArrayList<>();
 
         pageLinks.forEach(pgLink -> {
+
             WebDriver webDriver = new ChromeDriver();
             webDriver.manage().deleteAllCookies();
             webDriver.navigate().to(pgLink);
