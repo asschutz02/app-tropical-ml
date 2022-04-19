@@ -8,17 +8,19 @@ import lombok.AllArgsConstructor;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.tropical.selenium.decorator.AdSalesMLResponseDecorator.getNickName;
-import static com.example.tropical.selenium.email.EmailSender.emailSender;
+import static com.example.tropical.selenium.email.EmailJavaSender.emailJavaSender;
 import static com.example.tropical.selenium.finder.SeleniumFinder.*;
 import static com.example.tropical.selenium.helper.SeleniumHelper.getNumberOfPageResults;
 import static com.example.tropical.selenium.utils.SeleniumUtils.filterPrices;
@@ -37,9 +39,19 @@ public class SeleniumExecuter {
         List<AdSalesMLResponse> relatorio = new ArrayList<>();
 
         products.forEach(product -> {
-            String firstPage = searchProductByName(product.getName());
+            String firstPage = null;
+            try {
+                firstPage = searchProductByName(product.getName());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
 
-            List<String> links = linksPage(firstPage);
+            List<String> links = null;
+            try {
+                links = linksPage(firstPage);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
 
             List<AdSalesMLResponse> relatorioIndividual = getProductsInfo(links, product.getPrice());
 
@@ -52,12 +64,20 @@ public class SeleniumExecuter {
             e.printStackTrace();
         }
 
-        emailSender();
+        emailJavaSender();
+//        emailSender();
     }
 
-    public static List<String> linksPage(String firstPage) {
+    public static List<String> linksPage(String firstPage) throws MalformedURLException {
 
-        WebDriver webDriver = new ChromeDriver();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+
+
+        System.out.println("links page");
+
+        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
 
         webDriver.navigate().to(firstPage);
 
@@ -88,22 +108,20 @@ public class SeleniumExecuter {
         }
 
         webDriver.close();
+        webDriver.quit();
 
         return pageLinks;
     }
 
-    public static String searchProductByName(String productName) {
+    public static String searchProductByName(String productName) throws MalformedURLException {
 
         System.out.println("nome dentro do método: " + productName);
-        System.setProperty("webdriver.chrome.driver", "chromedriver");
-
 
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("headless");
         options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
 
-
-        WebDriver webDriver = new ChromeDriver();
+        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
 
         String baseUrl = "https://www.mercadolivre.com.br/";
 
@@ -120,6 +138,7 @@ public class SeleniumExecuter {
         String firstPage = webDriver.getCurrentUrl();
 
         webDriver.close();
+        webDriver.quit();
 
         return firstPage;
 
@@ -129,9 +148,19 @@ public class SeleniumExecuter {
 
         List<AdSalesMLResponse> finalList = new ArrayList<>();
 
+        System.out.println("get products info");
         pageLinks.forEach(pgLink -> {
 
-            WebDriver webDriver = new ChromeDriver();
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+
+            WebDriver webDriver = null;
+            try {
+                webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
             webDriver.manage().deleteAllCookies();
             webDriver.navigate().to(pgLink);
 
@@ -141,6 +170,7 @@ public class SeleniumExecuter {
                 createFinalObject(webDriver, price, finalList);
             }
             webDriver.close();
+            webDriver.quit();
         });
 
         return finalList;

@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.example.tropical.selenium.SeleniumExecuter.*;
-import static com.example.tropical.selenium.email.EmailSender.emailSender;
+import static com.example.tropical.selenium.email.EmailJavaSender.emailJavaSender;
 
 @Service
 @AllArgsConstructor
@@ -30,6 +30,7 @@ public class SearchService {
 
         excelExecuter.createExcel(relatorio);
 
-        emailSender();
+//        emailSender();
+        emailJavaSender();
     }
 }
