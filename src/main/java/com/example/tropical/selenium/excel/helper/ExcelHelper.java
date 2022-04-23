@@ -1,16 +1,16 @@
 package com.example.tropical.selenium.excel.helper;
 
 import com.example.tropical.selenium.model.AdSalesMLResponse;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExcelHelper {
 
-    public static void populateExcel(XSSFSheet paginaDoExcel, AdSalesMLResponse adSalesMLResponse, XSSFWorkbook workbook){
+    public static void populateExcel(XSSFSheet paginaDoExcel, AdSalesMLResponse adSalesMLResponse){
         List<String> titulos = new ArrayList<>();
         titulos.add("PRODUTO");
         titulos.add("LINK");
@@ -37,12 +37,6 @@ public class ExcelHelper {
 
             for (int i = 0; i < titulos.size(); i++) {
                 Cell celula = linha.createCell(i);
-
-                CellStyle cellStyle = workbook.createCellStyle();
-                paginaDoExcel.setColumnWidth(0, 3);
-                cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-                cellStyle.setAlignment(HorizontalAlignment.CENTER);
-
                 celula.setCellValue(titulos.get(i));
             }
         }

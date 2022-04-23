@@ -14,4 +14,5 @@ public class NicknamesEntity {
     private Integer id;
     private String nickname;
     private String customerBy;
+    private String lojista;
 }

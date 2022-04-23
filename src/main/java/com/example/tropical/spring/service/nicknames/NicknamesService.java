@@ -35,6 +35,10 @@ public class NicknamesService {
             NicknamesEntity nick = findByNickname(nickname);
             nicknamesEntity.setCustomerBy(nick.getCustomerBy());
             nicknamesMapper.updateNickname(nicknamesEntity, nickname);
+        } else if(Objects.isNull(nicknamesEntity.getLojista())){
+            NicknamesEntity nick = findByNickname(nickname);
+            nicknamesEntity.setLojista(nick.getLojista());
+            nicknamesMapper.updateNickname(nicknamesEntity, nickname);
         } else {
             nicknamesMapper.updateNickname(nicknamesEntity, nickname);
         }

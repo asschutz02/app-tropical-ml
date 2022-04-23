@@ -58,47 +58,47 @@ public final class ExcelExecuter {
 
                 switch (vendedorTropical) {
                     case "eveline":
-                        populateExcel(eveline, ad, workbook);
+                        populateExcel(eveline, ad);
                         break;
                     case "maciel":
-                        populateExcel(maciel, ad, workbook);
+                        populateExcel(maciel, ad);
                         break;
                     case "paola":
-                        populateExcel(paola, ad, workbook);
+                        populateExcel(paola, ad);
                         break;
                     case "rodrigo reis":
-                        populateExcel(rodrigoReis, ad, workbook);
+                        populateExcel(rodrigoReis, ad);
                         break;
                     case "eleandro":
-                        populateExcel(eleandro, ad, workbook);
+                        populateExcel(eleandro, ad);
                         break;
                     case "thomas":
-                        populateExcel(thomas, ad, workbook);
+                        populateExcel(thomas, ad);
                         break;
                     case "diego":
-                        populateExcel(diego, ad, workbook);
+                        populateExcel(diego, ad);
                         break;
                     case "willian":
-                        populateExcel(willian, ad, workbook);
+                        populateExcel(willian, ad);
                         break;
                     case "cesar":
-                        populateExcel(cesar, ad, workbook);
+                        populateExcel(cesar, ad);
                         break;
                     case "patrick":
-                        populateExcel(patrick, ad, workbook);
+                        populateExcel(patrick, ad);
                         break;
                     case "augusto":
-                        populateExcel(augusto, ad, workbook);
+                        populateExcel(augusto, ad);
                         break;
                     case "carlos eduardo":
-                        populateExcel(carlosEduardo, ad, workbook);
+                        populateExcel(carlosEduardo, ad);
                         break;
                     case "rafael":
-                        populateExcel(rafael, ad, workbook);
+                        populateExcel(rafael, ad);
                 }
                 objFiltrado.clear();
             } else  {
-                populateExcel(desconhecido, ad, workbook);
+                populateExcel(desconhecido, ad);
             }
         });
 

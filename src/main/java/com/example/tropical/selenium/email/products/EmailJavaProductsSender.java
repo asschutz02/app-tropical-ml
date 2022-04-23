@@ -1,4 +1,4 @@
-package com.example.tropical.selenium.email;
+package com.example.tropical.selenium.email.products;
 
 import org.springframework.stereotype.Component;
 
@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.Properties;
 
 @Component
-public class EmailJavaSender {
-    public static void emailJavaSender() {
+public class EmailJavaProductsSender {
 
+    public static void emailJavaProductSender() {
         // Recipient's email ID needs to be mentioned.
         String sendTo = "arthur.schutz123@gmail.com";
         String sendToSecond = "arthurschutzdasilva@gmail.com";
@@ -69,7 +69,7 @@ public class EmailJavaSender {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
             LocalDateTime now = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
             String dataFormatada = now.format(formatter);
-            message.setSubject("Planilha Relatório Mercado Livre - " + dataFormatada);
+            message.setSubject("Planilha Produtos Tropical - " + dataFormatada);
 
             Multipart multipart = new MimeMultipart();
 
@@ -79,7 +79,7 @@ public class EmailJavaSender {
 
             try {
 
-                File f =new File("tropical-ml.xlsx");
+                File f =new File("produtos-tropical-ml.xlsx");
 
                 attachmentPart.attachFile(f);
                 textPart.setText("Segue em anexo planilha");
@@ -100,6 +100,5 @@ public class EmailJavaSender {
         } catch (MessagingException mex) {
             mex.printStackTrace();
         }
-
     }
 }

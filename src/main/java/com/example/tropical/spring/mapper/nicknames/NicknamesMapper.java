@@ -11,7 +11,8 @@ public interface NicknamesMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     @Insert(value = "INSERT INTO nicknames (nickname, customer_by)            " +
             "        VALUES (#{nickname.nickname, jdbcType=VARCHAR},          " +
-            "                #{nickname.customerBy, jdbcType=VARCHAR});       " )
+            "                #{nickname.customerBy, jdbcType=VARCHAR},        " +
+            "                #{nickname.lojista, jdbcType=VARCHAR});          " )
     void insertAdvertiser(@Param("nickname") NicknamesEntity nickname);
 
     @Select("SELECT * FROM nicknames")
@@ -24,7 +25,8 @@ public interface NicknamesMapper {
 
     @Update(value = " UPDATE nicknames                                         " +
             " SET    nickname=#{nick.nickname, jdbcType=VARCHAR},              " +
-            "        customer_by=#{nick.customerBy, jdbcType=VARCHAR}          " +
+            "        customer_by=#{nick.customerBy, jdbcType=VARCHAR},         " +
+            "        lojista=#{nick.lojista, jdbcType=VARCHAR}                 " +
             " WHERE  nickname=#{nickname};                                     " )
     void updateNickname(@Param("nick") NicknamesEntity nick, String nickname);
 
