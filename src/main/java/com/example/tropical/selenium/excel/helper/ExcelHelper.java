@@ -7,17 +7,20 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ExcelHelper {
 
-    public static void populateExcel(XSSFSheet paginaDoExcel, AdSalesMLResponse adSalesMLResponse){
+    public static void populateExcel(XSSFSheet paginaDoExcel, AdSalesMLResponse adSalesMLResponse, String lojista){
         List<String> titulos = new ArrayList<>();
-        titulos.add("PRODUTO");
-        titulos.add("LINK");
-        titulos.add("VALOR ANÚNCIO");
+        titulos.add("TÍTULO DO ANÚNCIO");
+        titulos.add("LINK DO ANÚNCIO");
+        titulos.add("ID DO ANÚNCIO");
+        titulos.add("VALOR ANUNCIADO");
         titulos.add("NICKNAME");
-        titulos.add("LINK ANUNCIANTE");
-        titulos.add("LOJA");
+        titulos.add("LOJISTA");
+        titulos.add("LINK DO ANUNCIANTE");
+
 
         int tamanhoDaPagina = paginaDoExcel.getPhysicalNumberOfRows();
 
@@ -50,12 +53,23 @@ public class ExcelHelper {
         celula.setCellValue(adSalesMLResponse.getLinkAd());
 
         celula = linha.createCell(2);
-        celula.setCellValue(adSalesMLResponse.getPrice());
+        String linkAd = adSalesMLResponse.getLinkAd();
+        String MLB = linkAd.substring(0, 35);
+        String idAD = MLB.substring(0,13);
+        celula.setCellValue(idAD);
 
         celula = linha.createCell(3);
-        celula.setCellValue(adSalesMLResponse.getNickNameSeller());
+        celula.setCellValue(adSalesMLResponse.getPrice());
 
         celula = linha.createCell(4);
+        celula.setCellValue(adSalesMLResponse.getNickNameSeller());
+
+        celula = linha.createCell(5);
+        if(!Objects.isNull(lojista)){
+            celula.setCellValue(lojista);
+        }
+
+        celula = linha.createCell(6);
         celula.setCellValue(adSalesMLResponse.getLinkSeller());
     }
 }

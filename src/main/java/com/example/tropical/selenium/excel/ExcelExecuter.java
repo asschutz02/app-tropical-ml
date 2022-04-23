@@ -2,7 +2,9 @@ package com.example.tropical.selenium.excel;
 
 import com.example.tropical.selenium.model.AdSalesMLResponse;
 import com.example.tropical.spring.entity.nicknames.NicknamesEntity;
+import com.example.tropical.spring.entity.products.ProductsEntity;
 import com.example.tropical.spring.mapper.nicknames.NicknamesMapper;
+import com.example.tropical.spring.mapper.products.ProductsMapper;
 import lombok.AllArgsConstructor;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -15,12 +17,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.example.tropical.selenium.excel.helper.ExcelHelper.populateExcel;
+import static com.example.tropical.selenium.excel.product.ExcelProduct.populateExcelProduct;
 
 @AllArgsConstructor
 @Component
 public final class ExcelExecuter {
 
     private final NicknamesMapper nicknamesMapper;
+    private final ProductsMapper productsMapper;
 
     public void createExcel(List<AdSalesMLResponse> relatorio) throws IOException {
 
@@ -42,6 +46,7 @@ public final class ExcelExecuter {
         XSSFSheet carlosEduardo = workbook.createSheet("CARLOS EDUARDO");
         XSSFSheet rafael = workbook.createSheet("RAFAEL");
         XSSFSheet desconhecido = workbook.createSheet("DESCONHECIDO");
+        XSSFSheet pms = workbook.createSheet("PMS");
 
         relatorio.forEach(ad ->  {
 
@@ -53,54 +58,59 @@ public final class ExcelExecuter {
 
                 int indexOfNickNameEqual = nicknames.indexOf(objFiltrado.get(0));
                 String vendedorTropical = nicknames.get(indexOfNickNameEqual).getCustomerBy();
+                String lojista = nicknames.get(indexOfNickNameEqual).getLojista();
 
                 System.out.println(vendedorTropical);
 
                 switch (vendedorTropical) {
                     case "eveline":
-                        populateExcel(eveline, ad);
+                        populateExcel(eveline, ad, lojista);
                         break;
                     case "maciel":
-                        populateExcel(maciel, ad);
+                        populateExcel(maciel, ad, lojista);
                         break;
                     case "paola":
-                        populateExcel(paola, ad);
+                        populateExcel(paola, ad, lojista);
                         break;
                     case "rodrigo reis":
-                        populateExcel(rodrigoReis, ad);
+                        populateExcel(rodrigoReis, ad, lojista);
                         break;
                     case "eleandro":
-                        populateExcel(eleandro, ad);
+                        populateExcel(eleandro, ad, lojista);
                         break;
                     case "thomas":
-                        populateExcel(thomas, ad);
+                        populateExcel(thomas, ad, lojista);
                         break;
                     case "diego":
-                        populateExcel(diego, ad);
+                        populateExcel(diego, ad, lojista);
                         break;
                     case "willian":
-                        populateExcel(willian, ad);
+                        populateExcel(willian, ad, lojista);
                         break;
                     case "cesar":
-                        populateExcel(cesar, ad);
+                        populateExcel(cesar, ad, lojista);
                         break;
                     case "patrick":
-                        populateExcel(patrick, ad);
+                        populateExcel(patrick, ad, lojista);
                         break;
                     case "augusto":
-                        populateExcel(augusto, ad);
+                        populateExcel(augusto, ad, lojista);
                         break;
                     case "carlos eduardo":
-                        populateExcel(carlosEduardo, ad);
+                        populateExcel(carlosEduardo, ad, lojista);
                         break;
                     case "rafael":
-                        populateExcel(rafael, ad);
+                        populateExcel(rafael, ad, lojista);
                 }
                 objFiltrado.clear();
             } else  {
-                populateExcel(desconhecido, ad);
+                populateExcel(desconhecido, ad, null);
             }
         });
+
+        List<ProductsEntity> products = productsMapper.findAllProducts();
+
+        products.forEach(prod -> populateExcelProduct(pms, prod));
 
         FileOutputStream out = null;
         try {

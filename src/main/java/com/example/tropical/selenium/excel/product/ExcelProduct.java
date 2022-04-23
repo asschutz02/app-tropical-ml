@@ -28,7 +28,7 @@ public class ExcelProduct {
 
         XSSFSheet productsSheet = workbook.createSheet("PRODUTOS");
 
-        allProducts.forEach(prod -> populateExcelNickname(productsSheet, prod));
+        allProducts.forEach(prod -> populateExcelProduct(productsSheet, prod));
 
         FileOutputStream out = null;
         try {
@@ -50,9 +50,9 @@ public class ExcelProduct {
         }
     }
 
-    private static void populateExcelNickname(XSSFSheet paginaDoExcel, ProductsEntity obj){
+    public static void populateExcelProduct(XSSFSheet paginaDoExcel, ProductsEntity obj){
         List<String> titulos = new ArrayList<>();
-        titulos.add("NOME");
+        titulos.add("Descrição Produto");
         titulos.add("PMS");
 
         int tamanhoDaPagina = paginaDoExcel.getPhysicalNumberOfRows();

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -191,7 +190,6 @@ public class SeleniumExecuter {
             adResponse.setLinkAd(link);
             adResponse.setLinkSeller(linkSeller);
             adResponse.setNickNameSeller(getNickName(linkSeller));
-            adResponse.setActualDate(LocalDate.now());
 
             List<WebElement> prices = listaPrecos(webDriver);
             prices.forEach(price -> {
