@@ -27,7 +27,22 @@ public class NicknamesService {
     }
 
     public void updateNickname(NicknamesEntity nicknamesEntity, String nickname){
-        if(Objects.isNull(nicknamesEntity.getNickname())){
+        if(Objects.isNull(nicknamesEntity.getNickname()) && Objects.isNull(nicknamesEntity.getCustomerBy())){
+            NicknamesEntity nick = findByNickname(nickname);
+            nicknamesEntity.setNickname(nick.getNickname());
+            nicknamesEntity.setCustomerBy(nick.getCustomerBy());
+            nicknamesMapper.updateNickname(nicknamesEntity, nickname);
+        } else if(Objects.isNull(nicknamesEntity.getNickname()) && Objects.isNull(nicknamesEntity.getLojista())){
+            NicknamesEntity nick = findByNickname(nickname);
+            nicknamesEntity.setNickname(nick.getNickname());
+            nicknamesEntity.setLojista(nick.getLojista());
+            nicknamesMapper.updateNickname(nicknamesEntity, nickname);
+        } else if(Objects.isNull(nicknamesEntity.getCustomerBy()) && Objects.isNull(nicknamesEntity.getLojista())){
+            NicknamesEntity nick = findByNickname(nickname);
+            nicknamesEntity.setCustomerBy(nick.getCustomerBy());
+            nicknamesEntity.setLojista(nick.getLojista());
+            nicknamesMapper.updateNickname(nicknamesEntity, nickname);
+        } else if(Objects.isNull(nicknamesEntity.getNickname())){
             NicknamesEntity nick = findByNickname(nickname);
             nicknamesEntity.setNickname(nick.getNickname());
             nicknamesMapper.updateNickname(nicknamesEntity, nickname);

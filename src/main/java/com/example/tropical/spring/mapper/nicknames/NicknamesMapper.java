@@ -9,7 +9,7 @@ import java.util.List;
 public interface NicknamesMapper {
 
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    @Insert(value = "INSERT INTO nicknames (nickname, customer_by)            " +
+    @Insert(value = "INSERT INTO nicknames (nickname, customer_by, lojista)   " +
             "        VALUES (#{nickname.nickname, jdbcType=VARCHAR},          " +
             "                #{nickname.customerBy, jdbcType=VARCHAR},        " +
             "                #{nickname.lojista, jdbcType=VARCHAR});          " )
