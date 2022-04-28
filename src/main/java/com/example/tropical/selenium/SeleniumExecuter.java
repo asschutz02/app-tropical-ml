@@ -191,6 +191,15 @@ public class SeleniumExecuter {
             adResponse.setLinkSeller(linkSeller);
             adResponse.setNickNameSeller(getNickName(linkSeller));
 
+            if(adResponse.getNickNameSeller().contains("=")) {
+                String nickname = adResponse.getNickNameSeller();
+                adResponse.setNickNameSeller(nickname.replace("=", "-"));
+                if (adResponse.getNickNameSeller().contains("?")) {
+                    String nick = adResponse.getNickNameSeller();
+                    adResponse.setNickNameSeller(nick.replace("?", "-"));
+                }
+            }
+
             List<WebElement> prices = listaPrecos(webDriver);
             prices.forEach(price -> {
                 String fontSize = price.getCssValue("font-size");

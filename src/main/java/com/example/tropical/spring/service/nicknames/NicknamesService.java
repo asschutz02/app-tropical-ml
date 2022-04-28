@@ -15,6 +15,14 @@ public class NicknamesService {
     private final NicknamesMapper nicknamesMapper;
 
     public void insertAdvertiser(NicknamesEntity advertisers){
+        if(advertisers.getNickname().contains("=")) {
+            String nickname = advertisers.getNickname();
+            advertisers.setNickname(nickname.replace("=", "-"));
+            if (advertisers.getNickname().contains("?")) {
+                String nick = advertisers.getNickname();
+                advertisers.setNickname(nick.replace("?", "-"));
+            }
+        }
         nicknamesMapper.insertAdvertiser(advertisers);
     }
 

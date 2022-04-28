@@ -21,11 +21,7 @@ public class EmailJavaNicknameSender {
 
     public static void emailJavaNicknameSender() {
         // Recipient's email ID needs to be mentioned.
-        String sendTo = "arthur.schutz123@gmail.com";
-        String sendToSecond = "arthurschutzdasilva@gmail.com";
-        List<String> to = new ArrayList<>();
-        to.add(sendTo);
-        to.add(sendToSecond);
+        String to = "arthur.schutz123@gmail.com";
 
         // Sender's email ID needs to be mentioned
         String from = "arthurschutzdasilva@gmail.com";
@@ -62,8 +58,7 @@ public class EmailJavaNicknameSender {
             message.setFrom(new InternetAddress(from));
 
             // Set To: header field of the header.
-            message.addRecipients(Message.RecipientType.TO, String.valueOf(to));
-//            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
             // Set Subject: header field
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
