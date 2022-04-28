@@ -76,7 +76,8 @@ public class SeleniumExecuter {
 
         System.out.println("links page");
 
-        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
 
         webDriver.navigate().to(firstPage);
 
@@ -120,7 +121,8 @@ public class SeleniumExecuter {
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
 
-        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
 
         String baseUrl = "https://www.mercadolivre.com.br/";
 
@@ -156,7 +158,8 @@ public class SeleniumExecuter {
 
             WebDriver webDriver = null;
             try {
-                webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+//                webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+                webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -190,6 +193,7 @@ public class SeleniumExecuter {
             adResponse.setLinkAd(link);
             adResponse.setLinkSeller(linkSeller);
             adResponse.setNickNameSeller(getNickName(linkSeller));
+            adResponse.setPms(priceProduct);
 
             if(adResponse.getNickNameSeller().contains("=")) {
                 String nickname = adResponse.getNickNameSeller();

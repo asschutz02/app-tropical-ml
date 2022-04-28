@@ -46,7 +46,6 @@ public final class ExcelExecuter {
         XSSFSheet carlosEduardo = workbook.createSheet("CARLOS EDUARDO");
         XSSFSheet rafael = workbook.createSheet("RAFAEL");
         XSSFSheet desconhecido = workbook.createSheet("DESCONHECIDO");
-        XSSFSheet pms = workbook.createSheet("PMS");
 
         relatorio.forEach(ad ->  {
 
@@ -108,9 +107,9 @@ public final class ExcelExecuter {
             }
         });
 
-        List<ProductsEntity> products = productsMapper.findAllProducts();
-
-        products.forEach(prod -> populateExcelProduct(pms, prod));
+//        List<ProductsEntity> products = productsMapper.findAllProducts();
+//
+//        products.forEach(prod -> populateExcelProduct(pms, prod));
 
         FileOutputStream out = null;
         try {

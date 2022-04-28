@@ -14,6 +14,7 @@ public class ExcelHelper {
     public static void populateExcel(XSSFSheet paginaDoExcel, AdSalesMLResponse adSalesMLResponse, String lojista){
         List<String> titulos = new ArrayList<>();
         titulos.add("TÍTULO DO ANÚNCIO");
+        titulos.add("PMS");
         titulos.add("LINK DO ANÚNCIO");
         titulos.add("ID DO ANÚNCIO");
         titulos.add("VALOR ANUNCIADO");
@@ -50,26 +51,27 @@ public class ExcelHelper {
         celula.setCellValue(adSalesMLResponse.getProductName());
 
         celula = linha.createCell(1);
-        celula.setCellValue(adSalesMLResponse.getLinkAd());
+        celula.setCellValue(adSalesMLResponse.getPms());
 
         celula = linha.createCell(2);
-        String linkAd = adSalesMLResponse.getLinkAd();
-        String MLB = linkAd.substring(0, 35);
-        String idAD = MLB.substring(0,13);
-        celula.setCellValue(idAD);
+        celula.setCellValue(adSalesMLResponse.getLinkAd());
 
         celula = linha.createCell(3);
-        celula.setCellValue(adSalesMLResponse.getPrice());
+        String linkAd = adSalesMLResponse.getLinkAd();
+        String MLB = linkAd.substring(36);
+        String idAD = MLB.substring(0,14);
+        celula.setCellValue(idAD);
 
         celula = linha.createCell(4);
-        celula.setCellValue(adSalesMLResponse.getNickNameSeller());
+        celula.setCellValue(adSalesMLResponse.getPrice());
 
         celula = linha.createCell(5);
-        if(!Objects.isNull(lojista)){
-            celula.setCellValue(lojista);
-        }
+        celula.setCellValue(adSalesMLResponse.getNickNameSeller());
 
         celula = linha.createCell(6);
+        celula.setCellValue(lojista);
+
+        celula = linha.createCell(7);
         celula.setCellValue(adSalesMLResponse.getLinkSeller());
     }
 }
