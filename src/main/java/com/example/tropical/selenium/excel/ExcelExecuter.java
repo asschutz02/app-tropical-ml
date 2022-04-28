@@ -50,7 +50,7 @@ public final class ExcelExecuter {
         relatorio.forEach(ad ->  {
 
             List<NicknamesEntity> objFiltrado = nicknames.stream()
-                    .filter(nickname -> ad.getNickNameSeller().equals(nickname.getNickname()))
+                    .filter(nickname -> ad.getNickNameSeller().toLowerCase().equals(nickname.getNickname()))
                     .collect(Collectors.toList());
 
             if (!objFiltrado.isEmpty()) {
