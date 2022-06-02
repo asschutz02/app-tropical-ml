@@ -35,11 +35,11 @@ public final class ExcelExecuter {
         XSSFSheet eveline = workbook.createSheet("EVELINE");
         XSSFSheet maciel = workbook.createSheet("MACIEL");
         XSSFSheet paola = workbook.createSheet("PAOLA");
-        XSSFSheet rodrigoReis = workbook.createSheet("RODRIGO REIS");
+        XSSFSheet rodrigoReis = workbook.createSheet("REIS");
         XSSFSheet eleandro = workbook.createSheet("ELEANDRO");
         XSSFSheet thomas = workbook.createSheet("THOMAS");
         XSSFSheet diego = workbook.createSheet("DIEGO");
-        XSSFSheet willian = workbook.createSheet("WILLIAN");
+        XSSFSheet willian = workbook.createSheet("WILLIAM");
         XSSFSheet cesar = workbook.createSheet("CÉSAR");
         XSSFSheet patrick = workbook.createSheet("PATRICK");
         XSSFSheet augusto = workbook.createSheet("AUGUSTO");
@@ -71,7 +71,7 @@ public final class ExcelExecuter {
                     case "paola":
                         populateExcel(paola, ad, lojista);
                         break;
-                    case "rodrigo reis":
+                    case "reis":
                         populateExcel(rodrigoReis, ad, lojista);
                         break;
                     case "eleandro":
@@ -83,7 +83,7 @@ public final class ExcelExecuter {
                     case "diego":
                         populateExcel(diego, ad, lojista);
                         break;
-                    case "willian":
+                    case "william":
                         populateExcel(willian, ad, lojista);
                         break;
                     case "cesar":
@@ -106,10 +106,6 @@ public final class ExcelExecuter {
                 populateExcel(desconhecido, ad, null);
             }
         });
-
-//        List<ProductsEntity> products = productsMapper.findAllProducts();
-//
-//        products.forEach(prod -> populateExcelProduct(pms, prod));
 
         FileOutputStream out = null;
         try {

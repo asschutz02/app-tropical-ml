@@ -66,7 +66,7 @@ public class ExcelHelper {
         celula.setCellValue(adSalesMLResponse.getPrice());
 
         celula = linha.createCell(5);
-        celula.setCellValue(adSalesMLResponse.getNickNameSeller());
+        celula.setCellValue(adSalesMLResponse.getNickNameSeller().toUpperCase());
 
         celula = linha.createCell(6);
         celula.setCellValue(lojista);

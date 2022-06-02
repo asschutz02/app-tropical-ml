@@ -1,27 +1,33 @@
 package com.example.tropical.selenium.email.products;
 
-import org.springframework.stereotype.Component;
-
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+
+import org.springframework.stereotype.Component;
 
 @Component
 public class EmailJavaProductsSender {
 
     public static void emailJavaProductSender() {
         // Recipient's email ID needs to be mentioned.
-        String to = "arthur.schutz123@gmail.com";
+//                String to = "arthur.schutz123@gmail.com";
+//                String to = "vendas@tropicalimport.com.br";
+        String to = "marcasregistradas@tropicalimport.com.br";
 
         // Sender's email ID needs to be mentioned
         String from = "arthurschutzdasilva@gmail.com";
@@ -38,7 +44,6 @@ public class EmailJavaProductsSender {
         properties.put("mail.smtp.ssl.enable", "true");
         properties.put("mail.smtp.auth", "true");
 
-        // Get the Session object.// and pass
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
 
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -49,7 +54,7 @@ public class EmailJavaProductsSender {
             }
 
         });
-//session.setDebug(true);
+
         try {
             // Create a default MimeMessage object.
             MimeMessage message = new MimeMessage(session);
