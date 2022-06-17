@@ -1,16 +1,18 @@
 package com.example.tropical.selenium;
 
-import com.example.tropical.selenium.excel.ExcelExecuter;
-import com.example.tropical.selenium.model.AdSalesMLResponse;
-import com.example.tropical.spring.entity.products.ProductsEntity;
-import com.example.tropical.spring.mapper.products.ProductsMapper;
-import lombok.AllArgsConstructor;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.springframework.stereotype.Component;
+import static com.example.tropical.selenium.decorator.AdSalesMLResponseDecorator.getNickName;
+import static com.example.tropical.selenium.email.EmailJavaSender.emailJavaSender;
+import static com.example.tropical.selenium.finder.SeleniumFinder.barraPesquisa;
+import static com.example.tropical.selenium.finder.SeleniumFinder.botaoPesquisa;
+import static com.example.tropical.selenium.finder.SeleniumFinder.href;
+import static com.example.tropical.selenium.finder.SeleniumFinder.linksProdutosGrid;
+import static com.example.tropical.selenium.finder.SeleniumFinder.linksProdutosLine;
+import static com.example.tropical.selenium.finder.SeleniumFinder.listaPrecos;
+import static com.example.tropical.selenium.finder.SeleniumFinder.nomeProduto;
+import static com.example.tropical.selenium.finder.SeleniumFinder.numeroDePaginas;
+import static com.example.tropical.selenium.helper.SeleniumHelper.getLinksPage;
+import static com.example.tropical.selenium.helper.SeleniumHelper.getNumberOfPageResults;
+import static com.example.tropical.selenium.utils.SeleniumUtils.filterPrices;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -18,23 +20,28 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.tropical.selenium.decorator.AdSalesMLResponseDecorator.getNickName;
-import static com.example.tropical.selenium.email.EmailJavaSender.emailJavaSender;
-import static com.example.tropical.selenium.finder.SeleniumFinder.*;
-import static com.example.tropical.selenium.helper.SeleniumHelper.getLinksPage;
-import static com.example.tropical.selenium.helper.SeleniumHelper.getNumberOfPageResults;
-import static com.example.tropical.selenium.utils.SeleniumUtils.filterPrices;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.springframework.stereotype.Component;
+
+import com.example.tropical.selenium.excel.ExcelExecuter;
+import com.example.tropical.selenium.model.AdSalesMLResponse;
+import com.example.tropical.spring.entity.products.ProductsEntity;
+
+import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @Component
 public class SeleniumExecuter {
 
     private final ExcelExecuter excelExecuter;
-    private final ProductsMapper productsMapper;
 
-    public void executeSelenium() {
+    public void executeSelenium(List<ProductsEntity> products) {
         System.out.println("Executando o programa");
-        List<ProductsEntity> products = this.productsMapper.findAllProducts();
+//        List<ProductsEntity> products = this.productsMapper.findAllProducts();
         System.out.println("products: " + products);
         List<AdSalesMLResponse> relatorio = new ArrayList<>();
 
@@ -77,11 +84,10 @@ public class SeleniumExecuter {
 
         System.out.println("links page");
 
-//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
 //        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
-        WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
+//        WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
 //        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
-
         webDriver.navigate().to(firstPage);
 
         WebElement pageNumber = numeroDePaginas(webDriver);
@@ -109,9 +115,9 @@ public class SeleniumExecuter {
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
 
-//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
 //        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
-        WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
+//        WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
 //        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
 
         String baseUrl = "https://www.mercadolivre.com.br/";
@@ -128,10 +134,23 @@ public class SeleniumExecuter {
 
         String firstPage = webDriver.getCurrentUrl();
 
+        String linkNomeProduto = productName.replace(" ", "%20");
+        System.out.println("linkNomeProduto: " + linkNomeProduto);
+
+        System.out.println("link: " + firstPage);
+
+        String linkTratado = firstPage.replace("#D[A:".concat(linkNomeProduto).concat("]"), "");
+
+        System.out.println("linkTratado: " + linkTratado);
+
+        String linkPorOrdem = linkTratado.concat("_OrderId_PRICE_NoIndex_True");
+
+        System.out.println("linkPorOrdem: " + linkPorOrdem);
+
         webDriver.close();
         webDriver.quit();
 
-        return firstPage;
+        return linkPorOrdem;
 
     }
 
@@ -147,9 +166,9 @@ public class SeleniumExecuter {
 
             WebDriver webDriver = null;
             try {
-                webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
+//                webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
 //                webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
-//                webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+                webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
 //                webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
             } catch (MalformedURLException e) {
                 e.printStackTrace();

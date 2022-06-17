@@ -11,7 +11,8 @@ import java.util.Objects;
 
 public class ExcelHelper {
 
-    public static void populateExcel(XSSFSheet paginaDoExcel, AdSalesMLResponse adSalesMLResponse, String lojista){
+    public static void populateExcel(XSSFSheet paginaDoExcel, AdSalesMLResponse adSalesMLResponse, String lojista,
+            String vendedor){
         List<String> titulos = new ArrayList<>();
         titulos.add("TÍTULO DO ANÚNCIO");
         titulos.add("PMS");
@@ -21,6 +22,9 @@ public class ExcelHelper {
         titulos.add("NICKNAME");
         titulos.add("LOJISTA");
         titulos.add("LINK DO ANUNCIANTE");
+        if (!Objects.isNull(vendedor)) {
+            titulos.add("VENDEDOR");
+        }
 
 
         int tamanhoDaPagina = paginaDoExcel.getPhysicalNumberOfRows();
@@ -69,9 +73,18 @@ public class ExcelHelper {
         celula.setCellValue(adSalesMLResponse.getNickNameSeller().toUpperCase());
 
         celula = linha.createCell(6);
-        celula.setCellValue(lojista);
+        if (Objects.isNull(lojista)) {
+            celula.setCellValue(lojista);
+        } else {
+            celula.setCellValue(lojista.toUpperCase());
+        }
 
         celula = linha.createCell(7);
         celula.setCellValue(adSalesMLResponse.getLinkSeller());
+
+        if (!Objects.isNull(vendedor)) {
+            celula = linha.createCell(8);
+            celula.setCellValue(vendedor);
+        }
     }
 }

@@ -32,20 +32,21 @@ public final class ExcelExecuter {
 
         List<NicknamesEntity> nicknames = this.nicknamesMapper.findaAll();
 
+        XSSFSheet carlosEduardo = workbook.createSheet("CARLOS EDUARDO");
+        XSSFSheet cesar = workbook.createSheet("CÉSAR");
+        XSSFSheet diego = workbook.createSheet("DIEGO");
+        XSSFSheet eleandro = workbook.createSheet("ELEANDRO");
         XSSFSheet eveline = workbook.createSheet("EVELINE");
         XSSFSheet maciel = workbook.createSheet("MACIEL");
+        XSSFSheet oziel = workbook.createSheet("OZIEL");
         XSSFSheet paola = workbook.createSheet("PAOLA");
-        XSSFSheet rodrigoReis = workbook.createSheet("REIS");
-        XSSFSheet eleandro = workbook.createSheet("ELEANDRO");
-        XSSFSheet thomas = workbook.createSheet("THOMAS");
-        XSSFSheet diego = workbook.createSheet("DIEGO");
-        XSSFSheet willian = workbook.createSheet("WILLIAM");
-        XSSFSheet cesar = workbook.createSheet("CÉSAR");
         XSSFSheet patrick = workbook.createSheet("PATRICK");
-        XSSFSheet augusto = workbook.createSheet("AUGUSTO");
-        XSSFSheet carlosEduardo = workbook.createSheet("CARLOS EDUARDO");
         XSSFSheet rafael = workbook.createSheet("RAFAEL");
+        XSSFSheet rodrigoReis = workbook.createSheet("REIS");
+        XSSFSheet thomas = workbook.createSheet("THOMAS");
+        XSSFSheet willian = workbook.createSheet("WILLIAM");
         XSSFSheet desconhecido = workbook.createSheet("DESCONHECIDO");
+        XSSFSheet geral = workbook.createSheet("GERAL");
 
         relatorio.forEach(ad ->  {
 
@@ -63,47 +64,61 @@ public final class ExcelExecuter {
 
                 switch (vendedorTropical) {
                     case "eveline":
-                        populateExcel(eveline, ad, lojista);
+                        populateExcel(eveline, ad, lojista, null);
+                        populateExcel(geral, ad, lojista, "EVELINE");
                         break;
                     case "maciel":
-                        populateExcel(maciel, ad, lojista);
+                        populateExcel(maciel, ad, lojista, null);
+                        populateExcel(geral, ad, lojista, "MACIEL");
                         break;
                     case "paola":
-                        populateExcel(paola, ad, lojista);
+                        populateExcel(paola, ad, lojista, null);
+                        populateExcel(geral, ad, lojista, "PAOLA");
                         break;
                     case "reis":
-                        populateExcel(rodrigoReis, ad, lojista);
+                        populateExcel(rodrigoReis, ad, lojista, null);
+                        populateExcel(geral, ad, lojista, "REIS");
                         break;
                     case "eleandro":
-                        populateExcel(eleandro, ad, lojista);
+                        populateExcel(eleandro, ad, lojista, null);
+                        populateExcel(geral, ad, lojista, "ELEANDRO");
                         break;
                     case "thomas":
-                        populateExcel(thomas, ad, lojista);
+                        populateExcel(thomas, ad, lojista, null);
+                        populateExcel(geral, ad, lojista, "THOMAS");
                         break;
                     case "diego":
-                        populateExcel(diego, ad, lojista);
+                        populateExcel(diego, ad, lojista, null);
+                        populateExcel(geral, ad, lojista, "DIEGO");
                         break;
                     case "william":
-                        populateExcel(willian, ad, lojista);
+                        populateExcel(willian, ad, lojista, null);
+                        populateExcel(geral, ad, lojista, "WILLIAM");
                         break;
                     case "cesar":
-                        populateExcel(cesar, ad, lojista);
+                        populateExcel(cesar, ad, lojista, null);
+                        populateExcel(geral, ad, lojista, "CÉSAR");
                         break;
                     case "patrick":
-                        populateExcel(patrick, ad, lojista);
-                        break;
-                    case "augusto":
-                        populateExcel(augusto, ad, lojista);
+                        populateExcel(patrick, ad, lojista, null);
+                        populateExcel(geral, ad, lojista, "PATRICK");
                         break;
                     case "carlos eduardo":
-                        populateExcel(carlosEduardo, ad, lojista);
+                        populateExcel(carlosEduardo, ad, lojista, null);
+                        populateExcel(geral, ad, lojista, "CARLOS EDUARDO");
                         break;
                     case "rafael":
-                        populateExcel(rafael, ad, lojista);
+                        populateExcel(rafael, ad, lojista, null);
+                        populateExcel(geral, ad, lojista, "RAFAEL");
+                        break;
+                    case "oziel":
+                        populateExcel(oziel, ad, lojista, null);
+                        populateExcel(geral, ad, lojista, "OZIEL");
                 }
                 objFiltrado.clear();
             } else  {
-                populateExcel(desconhecido, ad, null);
+                populateExcel(desconhecido, ad, null, null);
+                populateExcel(geral, ad, null, null);
             }
         });
 

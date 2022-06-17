@@ -25,9 +25,9 @@ public class EmailJavaProductsSender {
 
     public static void emailJavaProductSender() {
         // Recipient's email ID needs to be mentioned.
-//                String to = "arthur.schutz123@gmail.com";
-//                String to = "vendas@tropicalimport.com.br";
-        String to = "marcasregistradas@tropicalimport.com.br";
+                String to = "arthur.schutz123@gmail.com";
+//        String to = "vendas@tropicalimport.com.br";
+//        String to = "marcasregistradas@tropicalimport.com.br";
 
         // Sender's email ID needs to be mentioned
         String from = "arthurschutzdasilva@gmail.com";
