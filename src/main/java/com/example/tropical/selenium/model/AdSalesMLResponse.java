@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Builder
 @Data
 @NoArgsConstructor
@@ -14,6 +12,7 @@ import java.time.LocalDate;
 public class AdSalesMLResponse {
 
     private String productName;
+    private String adTitle;
     private String linkSeller;
     private String linkAd;
     private Double price;

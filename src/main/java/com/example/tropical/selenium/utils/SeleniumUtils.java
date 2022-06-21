@@ -20,7 +20,9 @@ public final class SeleniumUtils {
     public static void filterPrices(List<WebElement> productLinks, WebDriver webDriver, List<String> links, Double priceProduct){
         List<WebElement> allPrices = precosProdutosLink(webDriver);
 
-        allPrices.removeIf(price -> !price.getCssValue("font-size").equals("24px"));
+        if (allPrices.size() != 0) {
+            allPrices.removeIf(price -> !price.getCssValue("font-size").equals("24px"));
+        }
 
         allPrices.forEach(priceML -> {
             CurrencyUnit real = getCurrency("BRL");

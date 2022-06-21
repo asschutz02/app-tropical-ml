@@ -14,6 +14,7 @@ public class ExcelHelper {
     public static void populateExcel(XSSFSheet paginaDoExcel, AdSalesMLResponse adSalesMLResponse, String lojista,
             String vendedor){
         List<String> titulos = new ArrayList<>();
+        titulos.add("NOME DO PRODUTO");
         titulos.add("TÍTULO DO ANÚNCIO");
         titulos.add("PMS");
         titulos.add("LINK DO ANÚNCIO");
@@ -52,38 +53,55 @@ public class ExcelHelper {
         linha = paginaDoExcel.createRow(numLinha);
 
         Cell celula = linha.createCell(0);
-        celula.setCellValue(adSalesMLResponse.getProductName());
+        celula.setCellValue(adSalesMLResponse.getProductName().toUpperCase());
 
         celula = linha.createCell(1);
-        celula.setCellValue(adSalesMLResponse.getPms());
+        celula.setCellValue(adSalesMLResponse.getAdTitle());
 
         celula = linha.createCell(2);
-        celula.setCellValue(adSalesMLResponse.getLinkAd());
+        celula.setCellValue(adSalesMLResponse.getPms());
 
         celula = linha.createCell(3);
+        celula.setCellValue(adSalesMLResponse.getLinkAd());
+
+        celula = linha.createCell(4);
         String linkAd = adSalesMLResponse.getLinkAd();
         String MLB = linkAd.substring(36);
         String idAD = MLB.substring(0,14);
         celula.setCellValue(idAD);
 
-        celula = linha.createCell(4);
-        celula.setCellValue(adSalesMLResponse.getPrice());
-
         celula = linha.createCell(5);
-        celula.setCellValue(adSalesMLResponse.getNickNameSeller().toUpperCase());
+        String precoAD = adSalesMLResponse.getPrice().toString();
+        String pms = adSalesMLResponse.getPms().toString();
+        if (precoAD.length() == 4 && (precoAD.contains(",") || precoAD.contains("."))) {
+            if (pms.length() == 6) {
+                String ponto = precoAD.replace(",", ".");
+                celula.setCellValue(ponto.concat("0"));
+            } else if (pms.length() == 5) {
+                String ponto = precoAD.replace(",", ".");
+                celula.setCellValue(ponto.concat("0"));
+            } else if (pms.length() == 4) {
+                celula.setCellValue(adSalesMLResponse.getPrice());
+            }
+        } else {
+            celula.setCellValue(adSalesMLResponse.getPrice());
+        }
 
         celula = linha.createCell(6);
+        celula.setCellValue(adSalesMLResponse.getNickNameSeller().toUpperCase());
+
+        celula = linha.createCell(7);
         if (Objects.isNull(lojista)) {
             celula.setCellValue(lojista);
         } else {
             celula.setCellValue(lojista.toUpperCase());
         }
 
-        celula = linha.createCell(7);
+        celula = linha.createCell(8);
         celula.setCellValue(adSalesMLResponse.getLinkSeller());
 
         if (!Objects.isNull(vendedor)) {
-            celula = linha.createCell(8);
+            celula = linha.createCell(9);
             celula.setCellValue(vendedor);
         }
     }

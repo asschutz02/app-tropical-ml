@@ -8,18 +8,30 @@ import static com.example.tropical.selenium.finder.SeleniumFinder.href;
 import static com.example.tropical.selenium.finder.SeleniumFinder.linksProdutosGrid;
 import static com.example.tropical.selenium.finder.SeleniumFinder.linksProdutosLine;
 import static com.example.tropical.selenium.finder.SeleniumFinder.listaPrecos;
-import static com.example.tropical.selenium.finder.SeleniumFinder.nomeProduto;
-import static com.example.tropical.selenium.finder.SeleniumFinder.numeroDePaginas;
+import static com.example.tropical.selenium.finder.SeleniumFinder.marcaProduto;
+import static com.example.tropical.selenium.finder.SeleniumFinder.numeroDePaginasList;
+import static com.example.tropical.selenium.finder.SeleniumFinder.precosProdutosLink;
+import static com.example.tropical.selenium.finder.SeleniumFinder.tituloAnuncio;
+import static com.example.tropical.selenium.helper.SeleniumHelper.comparePricePMS;
+import static com.example.tropical.selenium.helper.SeleniumHelper.containsOceanInAdTitle;
+import static com.example.tropical.selenium.helper.SeleniumHelper.filterOtherBrands;
 import static com.example.tropical.selenium.helper.SeleniumHelper.getLinksPage;
 import static com.example.tropical.selenium.helper.SeleniumHelper.getNumberOfPageResults;
+import static com.example.tropical.selenium.helper.SeleniumHelper.verifyIfIsOceanTech;
 import static com.example.tropical.selenium.utils.SeleniumUtils.filterPrices;
+import static javax.money.Monetary.getCurrency;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.money.CurrencyUnit;
+import javax.money.MonetaryAmount;
+
+import org.javamoney.moneta.Money;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -37,209 +49,265 @@ import lombok.AllArgsConstructor;
 @Component
 public class SeleniumExecuter {
 
-    private final ExcelExecuter excelExecuter;
+	private final ExcelExecuter excelExecuter;
 
-    public void executeSelenium(List<ProductsEntity> products) {
-        System.out.println("Executando o programa");
-//        List<ProductsEntity> products = this.productsMapper.findAllProducts();
-        System.out.println("products: " + products);
-        List<AdSalesMLResponse> relatorio = new ArrayList<>();
+	public void executeSelenium(List<ProductsEntity> products) {
+		System.out.println("Executando o programa");
+		//        List<ProductsEntity> products = this.productsMapper.findAllProducts();
+		System.out.println("products: " + products);
+		List<AdSalesMLResponse> relatorio = new ArrayList<>();
 
-        products.forEach(product -> {
-            String firstPage = null;
-            try {
-                firstPage = searchProductByName(product.getName());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+		products.forEach(product -> {
+			String firstPage = null;
+			try {
+				firstPage = searchProductByName(product.getName());
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
 
-            List<String> links = null;
-            try {
-                links = linksPage(firstPage);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+			List<String> links = null;
+			try {
+				links = linksPage(firstPage, product.getPrice());
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
 
-            List<AdSalesMLResponse> relatorioIndividual = getProductsInfo(links, product.getPrice());
+			List<AdSalesMLResponse> relatorioIndividual = getProductsInfo(links, product.getPrice(), product.getName());
 
-            relatorio.addAll(relatorioIndividual);
-        });
+			relatorio.addAll(relatorioIndividual);
+		});
 
-        try {
-            excelExecuter.createExcel(relatorio);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+		List<AdSalesMLResponse> relatorioFinal = filterOtherBrands(relatorio);
 
-        emailJavaSender();
-//        emailSender();
-    }
+		try {
+			excelExecuter.createExcel(relatorioFinal);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-    public static List<String> linksPage(String firstPage) throws MalformedURLException {
+		emailJavaSender();
+		//        emailSender();
+	}
 
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shdevm-usage");
+	public static List<String> linksPage(String firstPage, Double productPrice) throws MalformedURLException {
 
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--no-sandbox");
+		options.addArguments("--disable-dev-shdevm-usage");
 
-        System.out.println("links page");
+		System.out.println("links page");
 
-        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
-//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
-//        WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
-//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
-        webDriver.navigate().to(firstPage);
+		WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
+//		        WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
+		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
+		webDriver.navigate().to(firstPage);
 
-        WebElement pageNumber = numeroDePaginas(webDriver);
+		List<WebElement> listaPrecisaProximaPagina = new ArrayList<>();
+		List<WebElement> allPrices = precosProdutosLink(webDriver);
 
-        int numberPage = getNumberOfPageResults(pageNumber);
+		if (allPrices.size() != 0) {
+			allPrices.removeIf(price -> !price.getCssValue("font-size").equals("24px"));
+		}
 
-        System.out.println("numero de paginas: " + numberPage);
+		int allPriceTamanho;
 
-        List<String> pageLinks = new ArrayList<>();
+		if (allPrices.size() == 0) {
+			allPriceTamanho = 0;
+		} else {
+			allPriceTamanho = (allPrices.size() - 1);
+		}
 
-        pageLinks.add(firstPage);
+		if (allPrices.size() != 0) {
+			CurrencyUnit real = getCurrency("BRL");
+			String priceInt = allPrices.get(allPriceTamanho).getText().replace(".", "");
+			String priceFinal = priceInt.replace(".", "");
+			Integer price = Integer.valueOf(priceFinal);
+			MonetaryAmount money = Money.of(price, real);
+			comparePricePMS(money, real, productPrice, listaPrecisaProximaPagina, allPrices.get(allPriceTamanho));
+		}
 
-        List<String> finalList = getLinksPage(numberPage, pageLinks, webDriver);
+		List<String> pageLinks = new ArrayList<>();
 
-        webDriver.quit();
+		pageLinks.add(firstPage);
 
-        return finalList;
-    }
+		List<WebElement> pageNumber = numeroDePaginasList(webDriver);
 
-    public static String searchProductByName(String productName) throws MalformedURLException {
+		if (listaPrecisaProximaPagina.size() != 0 && pageNumber.size() != 0) {
+			System.out.println("VAI PRECISAR DE SEGUNDA PÁGINA");
 
-        System.out.println("nome dentro do método: " + productName);
+				int numberPage = getNumberOfPageResults(pageNumber.get(0));
 
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
+				System.out.println("numero de paginas: " + numberPage);
 
-        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
-//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
-//        WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
-//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
+				getLinksPage(numberPage, pageLinks, webDriver);
+		}
 
-        String baseUrl = "https://www.mercadolivre.com.br/";
+		webDriver.quit();
 
-        webDriver.get(baseUrl);
+		List<String> noRepeat = pageLinks.stream().distinct().collect(Collectors.toList());
 
-        WebElement input = barraPesquisa(webDriver);
+		return noRepeat;
+	}
 
-        input.sendKeys(productName);
+	public static String searchProductByName(String productName) throws MalformedURLException {
 
-        WebElement btn = botaoPesquisa(webDriver);
+		System.out.println("nome dentro do método: " + productName);
 
-        btn.click();
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--no-sandbox");
+		options.addArguments("--disable-dev-shm-usage");
 
-        String firstPage = webDriver.getCurrentUrl();
+		WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
+//		        WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
+		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
 
-        String linkNomeProduto = productName.replace(" ", "%20");
-        System.out.println("linkNomeProduto: " + linkNomeProduto);
+		String baseUrl = "https://www.mercadolivre.com.br/";
 
-        System.out.println("link: " + firstPage);
+		webDriver.get(baseUrl);
 
-        String linkTratado = firstPage.replace("#D[A:".concat(linkNomeProduto).concat("]"), "");
+		WebElement input = barraPesquisa(webDriver);
 
-        System.out.println("linkTratado: " + linkTratado);
+		input.sendKeys(productName);
 
-        String linkPorOrdem = linkTratado.concat("_OrderId_PRICE_NoIndex_True");
+		WebElement btn = botaoPesquisa(webDriver);
 
-        System.out.println("linkPorOrdem: " + linkPorOrdem);
+		btn.click();
 
-        webDriver.close();
-        webDriver.quit();
+		String firstPage = webDriver.getCurrentUrl();
 
-        return linkPorOrdem;
+		String linkNomeProduto = productName.replace(" ", "%20");
 
-    }
+		String linkTratado = firstPage.replace("#D[A:".concat(linkNomeProduto).concat("]"), "");
 
-    public static List<AdSalesMLResponse> getProductsInfo(List<String> pageLinks, Double price) {
+		String linkPorOrdem = linkTratado.concat("_OrderId_PRICE_NoIndex_True");
 
-        List<AdSalesMLResponse> finalList = new ArrayList<>();
+		webDriver.close();
+		webDriver.quit();
 
-        pageLinks.forEach(pgLink -> {
+		return linkPorOrdem;
 
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments("--no-sandbox");
-            options.addArguments("--disable-dev-shm-usage");
+	}
 
-            WebDriver webDriver = null;
-            try {
-//                webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
-//                webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
-                webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
-//                webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-            webDriver.manage().deleteAllCookies();
-            webDriver.navigate().to(pgLink);
+	public static List<AdSalesMLResponse> getProductsInfo(List<String> pageLinks, Double price, String productName) {
 
-            try {
-                createFinalObject(webDriver, price, finalList);
-            } catch (StaleElementReferenceException ex) {
-                createFinalObject(webDriver, price, finalList);
-            }
-            webDriver.close();
-            webDriver.quit();
-        });
+		List<AdSalesMLResponse> finalList = new ArrayList<>();
 
-        return finalList;
-    }
+		pageLinks.forEach(pgLink -> {
 
-    private static void createFinalObject(WebDriver webDriver, Double priceProduct, List<AdSalesMLResponse> finalList) {
-        List<String> linksResult = getProductInfo(webDriver, priceProduct);
-        linksResult.forEach(link -> {
-            webDriver.navigate().to(link);
+			ChromeOptions options = new ChromeOptions();
+			options.addArguments("--no-sandbox");
+			options.addArguments("--disable-dev-shm-usage");
 
-            WebElement href = href(webDriver);
-            String linkSeller = href.getAttribute("href");
+			WebDriver webDriver = null;
+			try {
+//				                webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
+				//                webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
+				webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+				//                webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+			webDriver.manage().deleteAllCookies();
+			webDriver.navigate().to(pgLink);
 
-            String productName = nomeProduto(webDriver);
+			try {
+				createFinalObject(webDriver, price, finalList, productName);
+			} catch (StaleElementReferenceException ex) {
+				createFinalObject(webDriver, price, finalList, productName);
+			}
+			webDriver.close();
+			webDriver.quit();
+		});
 
-            AdSalesMLResponse adResponse = new AdSalesMLResponse();
-            adResponse.setProductName(productName);
-            adResponse.setLinkAd(link);
-            adResponse.setLinkSeller(linkSeller);
-            adResponse.setNickNameSeller(getNickName(linkSeller));
-            adResponse.setPms(priceProduct);
+		return finalList;
+	}
 
-            if(adResponse.getNickNameSeller().contains("=")) {
-                String nickname = adResponse.getNickNameSeller();
-                adResponse.setNickNameSeller(nickname.replace("=", "-"));
-                if (adResponse.getNickNameSeller().contains("?")) {
-                    String nick = adResponse.getNickNameSeller();
-                    adResponse.setNickNameSeller(nick.replace("?", "-"));
-                }
-            }
+	private static void createFinalObject(WebDriver webDriver, Double priceProduct,
+			List<AdSalesMLResponse> finalList, String productName) {
 
-            List<WebElement> prices = listaPrecos(webDriver);
-            prices.forEach(price -> {
-                String fontSize = price.getCssValue("font-size");
-                if (fontSize.equals("36px")) {
-                    Double bigPrice = Double.valueOf(price.getText());
-                    adResponse.setPrice(bigPrice);
-                }
-            });
+		List<String> linksResult = getProductInfo(webDriver, priceProduct);
+		linksResult.forEach(link -> {
+			webDriver.navigate().to(link);
 
-            finalList.add(adResponse);
-        });
-    }
+			WebElement href = href(webDriver);
+			String linkSeller = href.getAttribute("href");
 
+			String adTitle = tituloAnuncio(webDriver);
 
-    private static List<String> getProductInfo(WebDriver webDriver, Double price) {
-        List<String> links = new ArrayList<>();
+			AdSalesMLResponse adResponse = new AdSalesMLResponse();
+			adResponse.setAdTitle(adTitle);
 
-        List<WebElement> productLinksGrid = linksProdutosGrid(webDriver);
+			List<WebElement> marcaAnuncio = marcaProduto(webDriver);
 
-        List<WebElement> productLinksLine = linksProdutosLine(webDriver);
+			if (marcaAnuncio.size() != 0) {
+				if (verifyIfIsOceanTech(marcaAnuncio.get(0).getText(), adTitle)) {
+					adResponse.setLinkAd(link);
+					adResponse.setLinkSeller(linkSeller);
+					adResponse.setNickNameSeller(getNickName(linkSeller));
+					adResponse.setPms(priceProduct);
+					adResponse.setProductName(productName);
 
-        if (productLinksGrid.size() > 0) {
-            filterPrices(productLinksGrid, webDriver, links, price);
-        } else {
-            filterPrices(productLinksLine, webDriver, links, price);
-        }
-        return links;
-    }
+					if (adResponse.getNickNameSeller().contains("=")) {
+						String nickname = adResponse.getNickNameSeller();
+						adResponse.setNickNameSeller(nickname.replace("=", "-"));
+						if (adResponse.getNickNameSeller().contains("?")) {
+							String nick = adResponse.getNickNameSeller();
+							adResponse.setNickNameSeller(nick.replace("?", "-"));
+						}
+					}
+
+					List<WebElement> prices = listaPrecos(webDriver);
+					prices.forEach(price -> {
+						String fontSize = price.getCssValue("font-size");
+						if (fontSize.equals("36px")) {
+							Double bigPrice = Double.valueOf(price.getText());
+							adResponse.setPrice(bigPrice);
+						}
+					});
+				}
+			} else if (containsOceanInAdTitle(adTitle.toLowerCase()) && marcaAnuncio.size() == 0) {
+				adResponse.setLinkAd(link);
+				adResponse.setLinkSeller(linkSeller);
+				adResponse.setNickNameSeller(getNickName(linkSeller));
+				adResponse.setPms(priceProduct);
+				adResponse.setProductName(productName);
+
+				if (adResponse.getNickNameSeller().contains("=")) {
+					String nickname = adResponse.getNickNameSeller();
+					adResponse.setNickNameSeller(nickname.replace("=", "-"));
+					if (adResponse.getNickNameSeller().contains("?")) {
+						String nick = adResponse.getNickNameSeller();
+						adResponse.setNickNameSeller(nick.replace("?", "-"));
+					}
+				}
+
+				List<WebElement> prices = listaPrecos(webDriver);
+				prices.forEach(price -> {
+					String fontSize = price.getCssValue("font-size");
+					if (fontSize.equals("36px")) {
+						Double bigPrice = Double.valueOf(price.getText());
+						adResponse.setPrice(bigPrice);
+					}
+				});
+			}
+			finalList.add(adResponse);
+		});
+	}
+
+	private static List<String> getProductInfo(WebDriver webDriver, Double price) {
+		List<String> links = new ArrayList<>();
+
+		List<WebElement> productLinksGrid = linksProdutosGrid(webDriver);
+
+		List<WebElement> productLinksLine = linksProdutosLine(webDriver);
+
+		if (productLinksGrid.size() > 0) {
+			filterPrices(productLinksGrid, webDriver, links, price);
+		} else {
+			filterPrices(productLinksLine, webDriver, links, price);
+		}
+		return links;
+	}
 }

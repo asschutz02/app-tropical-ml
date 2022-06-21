@@ -26,11 +26,9 @@ public class SearchService {
 
 		String firstPage = searchProductByName(productName);
 
-		List<String> links = linksPage(firstPage);
-		System.out.println("links: " + links);
-		System.out.println("links tamanho: " + links.size());
+		List<String> links = linksPage(firstPage, price);
 
-		List<AdSalesMLResponse> relatorio = getProductsInfo(links, price);
+		List<AdSalesMLResponse> relatorio = getProductsInfo(links, price, productName);
 
 		List<AdSalesMLResponse> relatorioFinal = relatorio.stream().filter(rel -> !rel.getLinkAd().contains("click1"))
 				.collect(Collectors.toList());
