@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin()
+//@CrossOrigin()
 @AllArgsConstructor
 @RestController
 @RequestMapping("/tropical/relatorio")
@@ -21,6 +21,7 @@ public class RelatorioController {
     private final RelatorioService service;
 
     @PatchMapping()
+    @CrossOrigin(origins = "http://localhost:4200")
     public void gerarRelatorio(@RequestBody List<ProductsEntity> productsEntities){
         this.service.gerarRelatorio(productsEntities);
     }
