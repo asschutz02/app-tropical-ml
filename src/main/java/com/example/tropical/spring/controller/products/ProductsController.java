@@ -15,6 +15,7 @@ public class ProductsController {
 
     private final ProductsService productsService;
 
+    @CrossOrigin
     @PostMapping
     public void insertProducts(@RequestBody ProductsEntity products){
         productsService.insertProduct(products);

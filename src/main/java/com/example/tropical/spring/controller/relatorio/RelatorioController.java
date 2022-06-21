@@ -20,6 +20,7 @@ public class RelatorioController {
 
     private final RelatorioService service;
 
+    @CrossOrigin
     @PatchMapping()
     public void gerarRelatorio(@RequestBody List<ProductsEntity> productsEntities){
         this.service.gerarRelatorio(productsEntities);
