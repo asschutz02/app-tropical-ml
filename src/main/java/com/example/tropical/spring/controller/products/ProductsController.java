@@ -22,7 +22,7 @@ public class ProductsController {
     }
 
     @GetMapping("/all")
-//    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @CrossOrigin(origins = "https://tropical-ml-frontend.herokuapp.com/")
     public List<ProductsEntity> findAll(){
         return productsService.findAll();
     }

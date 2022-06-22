@@ -22,7 +22,7 @@ public class RelatorioController {
     private final RelatorioService service;
 
     @PatchMapping()
-//    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @CrossOrigin(origins = "https://tropical-ml-frontend.herokuapp.com/")
     public void gerarRelatorio(@RequestBody List<ProductsEntity> productsEntities){
         this.service.gerarRelatorio(productsEntities);
     }
