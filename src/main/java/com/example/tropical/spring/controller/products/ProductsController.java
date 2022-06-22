@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//@CrossOrigin(origins = "*", maxAge = 3600)
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/tropical/products")
@@ -21,7 +22,7 @@ public class ProductsController {
     }
 
     @GetMapping("/all")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
+//    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public List<ProductsEntity> findAll(){
         return productsService.findAll();
     }
