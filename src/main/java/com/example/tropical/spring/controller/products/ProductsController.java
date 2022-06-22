@@ -9,7 +9,7 @@ import java.util.List;
 
 //@CrossOrigin(origins = "*", maxAge = 3600)
 //@CrossOrigin(origins = "*", maxAge = 3600)
-@CrossOrigin(origins = "https://tropical-ml-frontend.herokuapp.com/")
+//@CrossOrigin(origins = "https://tropical-ml-frontend.herokuapp.com/")
 @RestController
 @RequestMapping("/tropical/products")
 @AllArgsConstructor

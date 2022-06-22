@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 //@CrossOrigin(origins = "*", maxAge = 3600)
 //@CrossOrigin
-@CrossOrigin(origins = "https://tropical-ml-frontend.herokuapp.com/")
+//@CrossOrigin(origins = "https://tropical-ml-frontend.herokuapp.com/")
 @AllArgsConstructor
 @RestController
 @RequestMapping("/tropical/relatorio")
