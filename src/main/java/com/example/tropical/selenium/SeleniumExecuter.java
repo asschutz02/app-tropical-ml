@@ -36,6 +36,7 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.stereotype.Component;
 
@@ -158,8 +159,10 @@ public class SeleniumExecuter {
 		options.addArguments("--no-sandbox");
 		options.addArguments("--disable-dev-shm-usage");
 
+		DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+
 //		WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
-		WebDriver webDriver = new RemoteWebDriver(new URL("http://localhost:4444"), options);
+		WebDriver webDriver = new RemoteWebDriver(new URL("http://localhost:4444"), capabilities);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
 //		        WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
