@@ -23,6 +23,7 @@ public class RelatorioController {
     private final RelatorioService service;
 
     @PatchMapping()
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public void gerarRelatorio(@RequestBody List<ProductsEntity> productsEntities){
         this.service.gerarRelatorio(productsEntities);
     }

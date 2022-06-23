@@ -164,6 +164,7 @@ public class SeleniumExecuter {
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
 
 		String baseUrl = "https://www.mercadolivre.com.br/";
+		System.out.println(baseUrl);
 
 		webDriver.get(baseUrl);
 
