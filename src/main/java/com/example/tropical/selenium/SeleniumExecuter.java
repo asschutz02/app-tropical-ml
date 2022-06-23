@@ -159,7 +159,7 @@ public class SeleniumExecuter {
 		options.addArguments("--disable-dev-shm-usage");
 
 //		WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
-		WebDriver webDriver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), options);
+		WebDriver webDriver = new RemoteWebDriver(new URL("http://localhost:4444"), options);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
 //		        WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
