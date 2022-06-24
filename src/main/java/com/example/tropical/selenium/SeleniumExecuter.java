@@ -73,7 +73,8 @@ public class SeleniumExecuter {
 				e.printStackTrace();
 			}
 
-			List<AdSalesMLResponse> relatorioIndividual = getProductsInfo(links, product.getPrice(), product.getName());
+			List<AdSalesMLResponse> relatorioIndividual = getProductsInfo(links, product.getPrice(),
+					product.getName());
 
 			relatorio.addAll(relatorioIndividual);
 		});
@@ -98,9 +99,9 @@ public class SeleniumExecuter {
 
 		System.out.println("links page");
 
-		WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+		//		WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
-//		        WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
+		WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
 		webDriver.navigate().to(firstPage);
 
@@ -137,11 +138,11 @@ public class SeleniumExecuter {
 		if (listaPrecisaProximaPagina.size() != 0 && pageNumber.size() != 0) {
 			System.out.println("VAI PRECISAR DE SEGUNDA PÁGINA");
 
-				int numberPage = getNumberOfPageResults(pageNumber.get(0));
+			int numberPage = getNumberOfPageResults(pageNumber.get(0));
 
-				System.out.println("numero de paginas: " + numberPage);
+			System.out.println("numero de paginas: " + numberPage);
 
-				getLinksPage(numberPage, pageLinks, webDriver);
+			getLinksPage(numberPage, pageLinks, webDriver);
 		}
 
 		webDriver.quit();
@@ -159,16 +160,12 @@ public class SeleniumExecuter {
 		options.addArguments("--no-sandbox");
 		options.addArguments("--disable-dev-shm-usage");
 
-		DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-
-//		WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
-		WebDriver webDriver = new RemoteWebDriver(new URL("http://localhost:4444"), capabilities);
+		//		WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
-//		        WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
+		WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
 
 		String baseUrl = "https://www.mercadolivre.com.br/";
-		System.out.println(baseUrl);
 
 		webDriver.get(baseUrl);
 
@@ -207,9 +204,9 @@ public class SeleniumExecuter {
 
 			WebDriver webDriver = null;
 			try {
-//				                webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
+				webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
 				//                webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
-				webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+				//				webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
 				//                webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
 			} catch (MalformedURLException e) {
 				e.printStackTrace();

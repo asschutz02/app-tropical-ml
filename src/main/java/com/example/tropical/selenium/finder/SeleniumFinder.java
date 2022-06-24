@@ -52,6 +52,8 @@ public class SeleniumFinder {
 
 	public static List<WebElement> precosProdutosLink(WebDriver webDriver) {
 		return webDriver.findElements(By.xpath("//span[contains(@class, 'price-tag-fraction')]"));
+//		/html/body/main/div/div[2]/section/ol[1]/li[1]/div/div/a/div[1]/div[1]/div/div/div/span[1]/span[2]/span[2]
+		//*[@id="root-app"]/div/div[2]/section/ol[1]/li[1]/div/div/a/div[1]/div[1]/div/div/div/span[1]/span[2]/span[2]
 	}
 
 	public static List<WebElement> marcaProduto(WebDriver webDriver) {

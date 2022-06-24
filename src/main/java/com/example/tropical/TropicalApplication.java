@@ -15,16 +15,16 @@ public class TropicalApplication {
 		SpringApplication.run(TropicalApplication.class, args);
 	}
 
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry
-						.addMapping("/**")
-						.allowedOrigins("https://tropical-ml-frontend.herokuapp.com/")
-						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT");
-			}
-		};
-	}
+//	@Bean
+//	public WebMvcConfigurer corsConfigurer() {
+//		return new WebMvcConfigurer() {
+//			@Override
+//			public void addCorsMappings(CorsRegistry registry) {
+//				registry
+//						.addMapping("/**")
+//						.allowedOrigins("https://tropical-ml-frontend.herokuapp.com/")
+//						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT");
+//			}
+//		};
+//	}
 }

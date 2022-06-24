@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//@CrossOrigin(origins = "*", maxAge = 3600)
-//@CrossOrigin(origins = "*", maxAge = 3600)
-//@CrossOrigin(origins = "https://tropical-ml-frontend.herokuapp.com/")
+@CrossOrigin
 @RestController
 @RequestMapping("/tropical/products")
 @AllArgsConstructor
@@ -23,7 +21,6 @@ public class ProductsController {
     }
 
     @GetMapping("/all")
-//    @CrossOrigin(origins = "https://tropical-ml-frontend.herokuapp.com/")
     public List<ProductsEntity> findAll(){
         return productsService.findAll();
     }
