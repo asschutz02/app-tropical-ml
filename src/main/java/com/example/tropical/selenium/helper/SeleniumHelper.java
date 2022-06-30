@@ -3,7 +3,6 @@ package com.example.tropical.selenium.helper;
 import static com.example.tropical.selenium.finder.SeleniumFinder.primeiroBotaoSeguinte;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -165,4 +164,5 @@ public final class SeleniumHelper {
 	public static Boolean containsOceanInAdTitle(String adTitleLowerCase) {
 		return adTitleLowerCase.contains("ocean");
 	}
+
 }

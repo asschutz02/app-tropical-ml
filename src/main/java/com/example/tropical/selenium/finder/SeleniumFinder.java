@@ -28,8 +28,8 @@ public class SeleniumFinder {
 		return webDriver.findElement(By.xpath("//a[contains(@class, 'andes-pagination__link ui-search-link')][1]"));
 	}
 
-	public static WebElement href(WebDriver webDriver) {
-		return webDriver.findElement(By.xpath("/html/body/main/div/div[4]/div/div[1]/div/div[2]/div/div/a"));
+	public static List<WebElement> href(WebDriver webDriver) {
+		return webDriver.findElements(By.xpath("/html/body/main/div/div[4]/div/div[1]/div/div[2]/div/div/a"));
 	}
 
 	public static String tituloAnuncio(WebDriver webDriver) {

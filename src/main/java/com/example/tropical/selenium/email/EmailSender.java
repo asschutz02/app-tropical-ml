@@ -51,7 +51,7 @@ public class EmailSender {
             message.setSubject("Planilha Relatório Mercado Livre - " + dataFormatada);
 
             MimeBodyPart attachmentPart = new MimeBodyPart();
-            attachmentPart.attachFile(new File("tropical-ml.xlsx"));
+            attachmentPart.attachFile(new File("OceanTech-ML.xlsx"));
 
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(attachmentPart);

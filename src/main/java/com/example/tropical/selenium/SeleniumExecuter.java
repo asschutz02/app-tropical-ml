@@ -26,6 +26,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.money.CurrencyUnit;
@@ -36,7 +37,6 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.stereotype.Component;
 
@@ -99,7 +99,7 @@ public class SeleniumExecuter {
 
 		System.out.println("links page");
 
-		//		WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+//				WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
 		WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
@@ -160,7 +160,7 @@ public class SeleniumExecuter {
 		options.addArguments("--no-sandbox");
 		options.addArguments("--disable-dev-shm-usage");
 
-		//		WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+//				WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
 		WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
@@ -206,7 +206,7 @@ public class SeleniumExecuter {
 			try {
 				webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
 				//                webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
-				//				webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+//								webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
 				//                webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
@@ -233,8 +233,12 @@ public class SeleniumExecuter {
 		linksResult.forEach(link -> {
 			webDriver.navigate().to(link);
 
-			WebElement href = href(webDriver);
-			String linkSeller = href.getAttribute("href");
+			List<WebElement> href = (href(webDriver));
+
+			String linkSeller = null;
+			if (href.size() > 0) {
+				linkSeller = href.get(0).getAttribute("href");
+			}
 
 			String adTitle = tituloAnuncio(webDriver);
 
@@ -247,7 +251,9 @@ public class SeleniumExecuter {
 				if (verifyIfIsOceanTech(marcaAnuncio.get(0).getText(), adTitle)) {
 					adResponse.setLinkAd(link);
 					adResponse.setLinkSeller(linkSeller);
-					adResponse.setNickNameSeller(getNickName(linkSeller));
+					if (!Objects.isNull(linkSeller)) {
+						adResponse.setNickNameSeller(getNickName(linkSeller));
+					}
 					adResponse.setPms(priceProduct);
 					adResponse.setProductName(productName);
 

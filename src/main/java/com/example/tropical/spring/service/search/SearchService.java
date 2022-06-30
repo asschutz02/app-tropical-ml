@@ -7,6 +7,8 @@ import static com.example.tropical.selenium.email.EmailJavaSender.emailJavaSende
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -30,7 +32,10 @@ public class SearchService {
 
 		List<AdSalesMLResponse> relatorio = getProductsInfo(links, price, productName);
 
-		List<AdSalesMLResponse> relatorioFinal = relatorio.stream().filter(rel -> !rel.getLinkAd().contains("click1"))
+		List<AdSalesMLResponse> relatorioSemLinkNulo = relatorio.stream()
+				.filter(rel -> !Objects.isNull(rel.getLinkAd())).collect(Collectors.toList());
+
+		List<AdSalesMLResponse> relatorioFinal = relatorioSemLinkNulo.stream().filter(rel -> !rel.getLinkAd().contains("click1"))
 				.collect(Collectors.toList());
 
 		System.out.println("relatório: " + relatorioFinal);
