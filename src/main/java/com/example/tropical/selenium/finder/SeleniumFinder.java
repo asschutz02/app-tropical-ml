@@ -40,6 +40,11 @@ public class SeleniumFinder {
 		return webDriver.findElements(By.className("andes-money-amount__fraction"));
 	}
 
+	public static List<WebElement> listaCentavos(WebDriver webDriver) {
+		return webDriver.findElements(
+				By.xpath("/html/body/main/div/div[4]/div/div[1]/div/div[1]/div/div[2]/div/div[1]/span/span[4]"));
+	}
+
 	public static List<WebElement> linksProdutosGrid(WebDriver webDriver) {
 		return webDriver.findElements(By.xpath("//a[contains(@class, 'ui-search-result__content ui-search-link')]"));
 	}

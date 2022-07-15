@@ -15,7 +15,7 @@ public class AdSalesMLResponse {
     private String adTitle;
     private String linkSeller;
     private String linkAd;
-    private Double price;
+    private String price;
     private String nickNameSeller;
     private Double pms;
 }

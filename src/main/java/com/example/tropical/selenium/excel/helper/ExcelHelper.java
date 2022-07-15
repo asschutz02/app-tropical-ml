@@ -2,7 +2,6 @@ package com.example.tropical.selenium.excel.helper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
@@ -83,21 +82,7 @@ public class ExcelHelper {
 		celula.setCellValue(idAD);
 
 		celula = linha.createCell(7);
-		String precoAD = adSalesMLResponse.getPrice().toString();
-		String precoPMS = adSalesMLResponse.getPms().toString();
-
-		String[] array = precoAD.split("(?!^)");
-
-		List<String> streamArray = Arrays.asList(array);
-
-		if (precoAD.length() == 5 && precoPMS.length() == 6 && !startsWith(precoAD)) {
-			celula.setCellValue(precoAD.replace(".", ""));
-		} else if(precoPMS.length() == 6 && precoAD.length() == 4 && streamArray.get(1).equals(".")) {
-		    String priceWithoutPoint = precoAD.replace(".", "");
-		    celula.setCellValue(priceWithoutPoint.concat("0"));
-		} else {
-			celula.setCellValue(adSalesMLResponse.getPrice());
-		}
+		celula.setCellValue(adSalesMLResponse.getPrice());
 
 		celula = linha.createCell(8);
 		celula.setCellValue(adSalesMLResponse.getNickNameSeller().toUpperCase());
@@ -117,11 +102,13 @@ public class ExcelHelper {
 
 	public static void validateNickname(AdSalesMLResponse adSalesMLResponse) {
 		if (adSalesMLResponse.getNickNameSeller().contains("%C3%81") || adSalesMLResponse.getNickNameSeller().contains("%C3%82")
-		|| adSalesMLResponse.getNickNameSeller().contains("%C3%89") || adSalesMLResponse.getNickNameSeller().contains("%C3%8A")) {
+		|| adSalesMLResponse.getNickNameSeller().contains("%C3%89") || adSalesMLResponse.getNickNameSeller().contains("%C3%8A")
+		|| adSalesMLResponse.getNickNameSeller().contains("%C3%83"))  {
 			adSalesMLResponse.setNickNameSeller(adSalesMLResponse.getNickNameSeller().replace("%C3%81", "á"));
 			adSalesMLResponse.setNickNameSeller(adSalesMLResponse.getNickNameSeller().replace("%C3%82", "â"));
 			adSalesMLResponse.setNickNameSeller(adSalesMLResponse.getNickNameSeller().replace("%C3%89", "é"));
 			adSalesMLResponse.setNickNameSeller(adSalesMLResponse.getNickNameSeller().replace("%C3%8A", "ê"));
+			adSalesMLResponse.setNickNameSeller(adSalesMLResponse.getNickNameSeller().replace("%C3%83", "ã"));
 		}
 	}
 

@@ -2,7 +2,9 @@ package com.example.tropical.selenium.helper;
 
 import static com.example.tropical.selenium.finder.SeleniumFinder.primeiroBotaoSeguinte;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -165,4 +167,14 @@ public final class SeleniumHelper {
 		return adTitleLowerCase.contains("ocean");
 	}
 
+	public static Boolean isNotProdutoParecido(Optional<String> produtoParecido, String adTitle) {
+//		return produtoParecido.isPresent() && !adTitle.contains(produtoParecido.get());
+		if (produtoParecido.isPresent() && produtoParecido.get().contains(" ")) {
+			String [] stringArray= produtoParecido.get().split(" ");
+			List<String> nomesParecidos = List.of(stringArray);
+			return !nomesParecidos.stream().anyMatch(adTitle::contains);
+		} else {
+			return produtoParecido.isPresent() && !adTitle.contains(produtoParecido.get());
+		}
+	}
 }

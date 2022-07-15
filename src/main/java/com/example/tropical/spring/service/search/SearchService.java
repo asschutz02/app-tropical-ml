@@ -30,7 +30,7 @@ public class SearchService {
 
 		List<String> links = linksPage(firstPage, price);
 
-		List<AdSalesMLResponse> relatorio = getProductsInfo(links, price, productName);
+		List<AdSalesMLResponse> relatorio = getProductsInfo(links, price, productName, null);
 
 		List<AdSalesMLResponse> relatorioSemLinkNulo = relatorio.stream()
 				.filter(rel -> !Objects.isNull(rel.getLinkAd())).collect(Collectors.toList());

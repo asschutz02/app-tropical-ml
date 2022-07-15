@@ -7,6 +7,7 @@ import static com.example.tropical.selenium.finder.SeleniumFinder.botaoPesquisa;
 import static com.example.tropical.selenium.finder.SeleniumFinder.href;
 import static com.example.tropical.selenium.finder.SeleniumFinder.linksProdutosGrid;
 import static com.example.tropical.selenium.finder.SeleniumFinder.linksProdutosLine;
+import static com.example.tropical.selenium.finder.SeleniumFinder.listaCentavos;
 import static com.example.tropical.selenium.finder.SeleniumFinder.listaPrecos;
 import static com.example.tropical.selenium.finder.SeleniumFinder.marcaProduto;
 import static com.example.tropical.selenium.finder.SeleniumFinder.numeroDePaginasList;
@@ -17,6 +18,7 @@ import static com.example.tropical.selenium.helper.SeleniumHelper.containsOceanI
 import static com.example.tropical.selenium.helper.SeleniumHelper.filterOtherBrands;
 import static com.example.tropical.selenium.helper.SeleniumHelper.getLinksPage;
 import static com.example.tropical.selenium.helper.SeleniumHelper.getNumberOfPageResults;
+import static com.example.tropical.selenium.helper.SeleniumHelper.isNotProdutoParecido;
 import static com.example.tropical.selenium.helper.SeleniumHelper.verifyIfIsOceanTech;
 import static com.example.tropical.selenium.utils.SeleniumUtils.filterPrices;
 import static javax.money.Monetary.getCurrency;
@@ -27,6 +29,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.money.CurrencyUnit;
@@ -73,8 +76,10 @@ public class SeleniumExecuter {
 				e.printStackTrace();
 			}
 
-			List<AdSalesMLResponse> relatorioIndividual = getProductsInfo(links, product.getPrice(),
-					product.getName());
+			Optional<String> produtoSimilar = Optional.ofNullable(product.getProximo());
+
+			List<AdSalesMLResponse> relatorioIndividual = getProductsInfo(links, product.getPrice(), product.getName(),
+					produtoSimilar);
 
 			relatorio.addAll(relatorioIndividual);
 		});
@@ -99,9 +104,9 @@ public class SeleniumExecuter {
 
 		System.out.println("links page");
 
-//				WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+//		WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
-		WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
+				WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
 		webDriver.navigate().to(firstPage);
 
@@ -160,9 +165,9 @@ public class SeleniumExecuter {
 		options.addArguments("--no-sandbox");
 		options.addArguments("--disable-dev-shm-usage");
 
-//				WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+//		WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
-		WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
+				WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
 
 		String baseUrl = "https://www.mercadolivre.com.br/";
@@ -192,7 +197,8 @@ public class SeleniumExecuter {
 
 	}
 
-	public static List<AdSalesMLResponse> getProductsInfo(List<String> pageLinks, Double price, String productName) {
+	public static List<AdSalesMLResponse> getProductsInfo(List<String> pageLinks, Double price, String productName,
+			Optional<String> produtoSimilar) {
 
 		List<AdSalesMLResponse> finalList = new ArrayList<>();
 
@@ -205,8 +211,9 @@ public class SeleniumExecuter {
 			WebDriver webDriver = null;
 			try {
 				webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
-				//                webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
-//								webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+				//				                webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"),
+				//				                options);
+				//				webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
 				//                webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
@@ -215,9 +222,9 @@ public class SeleniumExecuter {
 			webDriver.navigate().to(pgLink);
 
 			try {
-				createFinalObject(webDriver, price, finalList, productName);
+				createFinalObject(webDriver, price, finalList, productName, produtoSimilar);
 			} catch (StaleElementReferenceException ex) {
-				createFinalObject(webDriver, price, finalList, productName);
+				createFinalObject(webDriver, price, finalList, productName, produtoSimilar);
 			}
 			webDriver.close();
 			webDriver.quit();
@@ -227,7 +234,7 @@ public class SeleniumExecuter {
 	}
 
 	private static void createFinalObject(WebDriver webDriver, Double priceProduct,
-			List<AdSalesMLResponse> finalList, String productName) {
+			List<AdSalesMLResponse> finalList, String productName, Optional<String> produtoParecido) {
 
 		List<String> linksResult = getProductInfo(webDriver, priceProduct);
 		linksResult.forEach(link -> {
@@ -247,13 +254,49 @@ public class SeleniumExecuter {
 
 			List<WebElement> marcaAnuncio = marcaProduto(webDriver);
 
-			if (marcaAnuncio.size() != 0) {
-				if (verifyIfIsOceanTech(marcaAnuncio.get(0).getText(), adTitle)) {
+			if (isNotProdutoParecido(produtoParecido, adTitle)) {
+				if (marcaAnuncio.size() != 0) {
+					if (verifyIfIsOceanTech(marcaAnuncio.get(0).getText(), adTitle)) {
+						adResponse.setLinkAd(link);
+						adResponse.setLinkSeller(linkSeller);
+						if (!Objects.isNull(linkSeller)) {
+							adResponse.setNickNameSeller(getNickName(linkSeller));
+						}
+						adResponse.setPms(priceProduct);
+						adResponse.setProductName(productName);
+
+						if (adResponse.getNickNameSeller().contains("=")) {
+							String nickname = adResponse.getNickNameSeller();
+							adResponse.setNickNameSeller(nickname.replace("=", "-"));
+							if (adResponse.getNickNameSeller().contains("?")) {
+								String nick = adResponse.getNickNameSeller();
+								adResponse.setNickNameSeller(nick.replace("?", "-"));
+							}
+						}
+
+						List<WebElement> prices = listaPrecos(webDriver);
+						prices.forEach(price -> {
+							String fontSize = price.getCssValue("font-size");
+							if (fontSize.equals("36px")) {
+								String bigPrice = price.getText();
+								adResponse.setPrice(bigPrice);
+							}
+						});
+
+						List<WebElement> centavos = listaCentavos(webDriver);
+
+						if (centavos.size() > 0) {
+							String precoAtual = adResponse.getPrice();
+
+							String precoComCentavos = precoAtual.concat("," + centavos.get(0).getText());
+
+							adResponse.setPrice(precoComCentavos);
+						}
+					}
+				} else if (containsOceanInAdTitle(adTitle.toLowerCase()) && marcaAnuncio.size() == 0) {
 					adResponse.setLinkAd(link);
 					adResponse.setLinkSeller(linkSeller);
-					if (!Objects.isNull(linkSeller)) {
-						adResponse.setNickNameSeller(getNickName(linkSeller));
-					}
+					adResponse.setNickNameSeller(getNickName(linkSeller));
 					adResponse.setPms(priceProduct);
 					adResponse.setProductName(productName);
 
@@ -270,35 +313,21 @@ public class SeleniumExecuter {
 					prices.forEach(price -> {
 						String fontSize = price.getCssValue("font-size");
 						if (fontSize.equals("36px")) {
-							Double bigPrice = Double.valueOf(price.getText());
+							String bigPrice = price.getText();
 							adResponse.setPrice(bigPrice);
 						}
 					});
-				}
-			} else if (containsOceanInAdTitle(adTitle.toLowerCase()) && marcaAnuncio.size() == 0) {
-				adResponse.setLinkAd(link);
-				adResponse.setLinkSeller(linkSeller);
-				adResponse.setNickNameSeller(getNickName(linkSeller));
-				adResponse.setPms(priceProduct);
-				adResponse.setProductName(productName);
 
-				if (adResponse.getNickNameSeller().contains("=")) {
-					String nickname = adResponse.getNickNameSeller();
-					adResponse.setNickNameSeller(nickname.replace("=", "-"));
-					if (adResponse.getNickNameSeller().contains("?")) {
-						String nick = adResponse.getNickNameSeller();
-						adResponse.setNickNameSeller(nick.replace("?", "-"));
+					List<WebElement> centavos = listaCentavos(webDriver);
+
+					if (centavos.size() > 0) {
+						String precoAtual = adResponse.getPrice();
+
+						String precoComCentavos = precoAtual.concat("," + centavos.get(0).getText());
+
+						adResponse.setPrice(precoComCentavos);
 					}
 				}
-
-				List<WebElement> prices = listaPrecos(webDriver);
-				prices.forEach(price -> {
-					String fontSize = price.getCssValue("font-size");
-					if (fontSize.equals("36px")) {
-						Double bigPrice = Double.valueOf(price.getText());
-						adResponse.setPrice(bigPrice);
-					}
-				});
 			}
 			finalList.add(adResponse);
 		});
