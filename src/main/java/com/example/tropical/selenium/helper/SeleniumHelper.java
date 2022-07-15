@@ -173,8 +173,10 @@ public final class SeleniumHelper {
 			String [] stringArray= produtoParecido.get().split(" ");
 			List<String> nomesParecidos = List.of(stringArray);
 			return !nomesParecidos.stream().anyMatch(adTitle::contains);
+		} else if(produtoParecido.isPresent() && !produtoParecido.get().contains(" ")) {
+			return !adTitle.contains(produtoParecido.get());
 		} else {
-			return produtoParecido.isPresent() && !adTitle.contains(produtoParecido.get());
+			return produtoParecido.isEmpty();
 		}
 	}
 }
