@@ -25,9 +25,9 @@ public class EmailJavaSender {
 	public static void emailJavaSender() {
 
 		//         Recipient's email ID needs to be mentioned.
-//		        String to = "arthur.schutz123@gmail.com";
-		//        String to = "vendas@tropicalimport.com.br";
-		String to = "marcasregistradas@tropicalimport.com.br";
+		        String to = "arthur.schutz123@gmail.com";
+		//        String to = \"vendas@tropicalimport.com.br";
+//		String to = "marcasregistradas@tropicalimport.com.br";
 
 		// Sender's email ID needs to be mentioned
 		String from = "arthurschutzdasilva@gmail.com";
@@ -39,10 +39,15 @@ public class EmailJavaSender {
 		Properties properties = System.getProperties();
 
 		// Setup mail server
-		properties.put("mail.smtp.host", host);
-		properties.put("mail.smtp.port", "465");
-		properties.put("mail.smtp.ssl.enable", "true");
+//		properties.put("mail.smtp.host", host);
+//		properties.put("mail.smtp.port", "465");
+//		properties.put("mail.smtp.ssl.enable", "true");
+//		properties.put("mail.smtp.auth", "true");
+		properties.put("mail.smtp.host", "smtp.gmail.com");
 		properties.put("mail.smtp.auth", "true");
+		properties.put("mail.smtp.port", "587");
+		properties.put("mail.smtp.starttls.enable", "true");
+		properties.put("mail.smtp.ssl.trust", "*");
 
 		// Get the Session object.// and pass
 		Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
@@ -50,7 +55,7 @@ public class EmailJavaSender {
 			protected PasswordAuthentication getPasswordAuthentication() {
 
 				return new PasswordAuthentication("arthurschutzdasilva@gmail.com",
-						"rjalevyscnrdbswe");
+						"xzbwkhrbjewpwodz");
 
 			}
 

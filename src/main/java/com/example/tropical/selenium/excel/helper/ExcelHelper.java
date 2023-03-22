@@ -103,17 +103,13 @@ public class ExcelHelper {
 	public static void validateNickname(AdSalesMLResponse adSalesMLResponse) {
 		if (adSalesMLResponse.getNickNameSeller().contains("%C3%81") || adSalesMLResponse.getNickNameSeller().contains("%C3%82")
 		|| adSalesMLResponse.getNickNameSeller().contains("%C3%89") || adSalesMLResponse.getNickNameSeller().contains("%C3%8A")
-		|| adSalesMLResponse.getNickNameSeller().contains("%C3%83"))  {
+		|| adSalesMLResponse.getNickNameSeller().contains("%C3%83") || adSalesMLResponse.getNickNameSeller().contains("%C3%87") ){
 			adSalesMLResponse.setNickNameSeller(adSalesMLResponse.getNickNameSeller().replace("%C3%81", "á"));
 			adSalesMLResponse.setNickNameSeller(adSalesMLResponse.getNickNameSeller().replace("%C3%82", "â"));
 			adSalesMLResponse.setNickNameSeller(adSalesMLResponse.getNickNameSeller().replace("%C3%89", "é"));
 			adSalesMLResponse.setNickNameSeller(adSalesMLResponse.getNickNameSeller().replace("%C3%8A", "ê"));
 			adSalesMLResponse.setNickNameSeller(adSalesMLResponse.getNickNameSeller().replace("%C3%83", "ã"));
+			adSalesMLResponse.setNickNameSeller(adSalesMLResponse.getNickNameSeller().replace("%C3%87", "ç"));
 		}
-	}
-
-	private static boolean startsWith(String precoAD) {
-		return precoAD.startsWith("5") || precoAD.startsWith("6") || precoAD.startsWith("7") || precoAD.startsWith("8")
-				|| precoAD.startsWith("9");
 	}
 }

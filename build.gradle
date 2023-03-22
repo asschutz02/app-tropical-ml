@@ -20,7 +20,7 @@ repositories {
 
 dependencies {
 	implementation 'org.javamoney:moneta:1.4.2'
-	implementation group: 'org.seleniumhq.selenium', name: 'selenium-java'
+	implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.8.1'
 	implementation 'org.springframework.boot:spring-boot-starter-batch'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-web'

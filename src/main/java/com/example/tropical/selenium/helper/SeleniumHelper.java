@@ -2,9 +2,7 @@ package com.example.tropical.selenium.helper;
 
 import static com.example.tropical.selenium.finder.SeleniumFinder.primeiroBotaoSeguinte;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -156,7 +154,8 @@ public final class SeleniumHelper {
 		String brandLowerCase = brand.toLowerCase();
 		String adTitleLowerCase = adTitle.toLowerCase();
 
-		return isBrandEqualsOceanTech(brandLowerCase) || containsOceanInAdTitle(adTitleLowerCase);
+		return (isBrandEqualsOceanTech(brandLowerCase) || containsOceanInAdTitle(adTitleLowerCase))
+				&& isNotAnotherBrand(adTitleLowerCase);
 	}
 
 	private static Boolean isBrandEqualsOceanTech(String brandLowerCase) {
@@ -167,8 +166,12 @@ public final class SeleniumHelper {
 		return adTitleLowerCase.contains("ocean");
 	}
 
+	private static Boolean isNotAnotherBrand(String adTitleLowerCase) {
+		return !adTitleLowerCase.contains("aqua ocean") && !adTitleLowerCase.contains("aquaocean") &&
+				!adTitleLowerCase.contains("instant ocean") && !adTitleLowerCase.contains("instantocean");
+	}
+
 	public static Boolean isNotProdutoParecido(Optional<String> produtoParecido, String adTitle) {
-//		return produtoParecido.isPresent() && !adTitle.contains(produtoParecido.get());
 		if (produtoParecido.isPresent() && produtoParecido.get().contains(" ")) {
 			String [] stringArray= produtoParecido.get().split(" ");
 			List<String> nomesParecidos = List.of(stringArray);

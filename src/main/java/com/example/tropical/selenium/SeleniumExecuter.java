@@ -12,6 +12,9 @@ import static com.example.tropical.selenium.finder.SeleniumFinder.listaPrecos;
 import static com.example.tropical.selenium.finder.SeleniumFinder.marcaProduto;
 import static com.example.tropical.selenium.finder.SeleniumFinder.numeroDePaginasList;
 import static com.example.tropical.selenium.finder.SeleniumFinder.precosProdutosLink;
+import static com.example.tropical.selenium.finder.SeleniumFinder.precosProdutosLink1;
+import static com.example.tropical.selenium.finder.SeleniumFinder.precosProdutosLink2;
+import static com.example.tropical.selenium.finder.SeleniumFinder.precosProdutosLink3;
 import static com.example.tropical.selenium.finder.SeleniumFinder.tituloAnuncio;
 import static com.example.tropical.selenium.helper.SeleniumHelper.comparePricePMS;
 import static com.example.tropical.selenium.helper.SeleniumHelper.containsOceanInAdTitle;
@@ -57,7 +60,6 @@ public class SeleniumExecuter {
 
 	public void executeSelenium(List<ProductsEntity> products) {
 		System.out.println("Executando o programa");
-		//        List<ProductsEntity> products = this.productsMapper.findAllProducts();
 		System.out.println("products: " + products);
 		List<AdSalesMLResponse> relatorio = new ArrayList<>();
 
@@ -104,14 +106,27 @@ public class SeleniumExecuter {
 
 		System.out.println("links page");
 
-//		WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+				WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
-						WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
+//		WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
 		webDriver.navigate().to(firstPage);
 
 		List<WebElement> listaPrecisaProximaPagina = new ArrayList<>();
 		List<WebElement> allPrices = precosProdutosLink(webDriver);
+//		List<WebElement> allPrices;
+//		List<WebElement> allPrices1 = precosProdutosLink1(webDriver);
+//		List<WebElement> allPrices2 = precosProdutosLink2(webDriver);
+//		List<WebElement> allPrices3 = precosProdutosLink3(webDriver);
+
+//		if (!allPrices1.isEmpty()) {
+//			allPrices = allPrices1;
+//		} else if (!allPrices2.isEmpty()) {
+//			allPrices = allPrices2;
+//		} else {
+//			allPrices = allPrices3;
+//		}
+
 
 		if (allPrices.size() != 0) {
 			allPrices.removeIf(price -> !price.getCssValue("font-size").equals("24px"));
@@ -140,7 +155,7 @@ public class SeleniumExecuter {
 
 		List<WebElement> pageNumber = numeroDePaginasList(webDriver);
 
-		if (listaPrecisaProximaPagina.size() != 0 && pageNumber.size() != 0) {
+		if (!listaPrecisaProximaPagina.isEmpty() && !pageNumber.isEmpty()) {
 			System.out.println("VAI PRECISAR DE SEGUNDA PÁGINA");
 
 			int numberPage = getNumberOfPageResults(pageNumber.get(0));
@@ -152,9 +167,7 @@ public class SeleniumExecuter {
 
 		webDriver.quit();
 
-		List<String> noRepeat = pageLinks.stream().distinct().collect(Collectors.toList());
-
-		return noRepeat;
+		return pageLinks.stream().distinct().collect(Collectors.toList());
 	}
 
 	public static String searchProductByName(String productName) throws MalformedURLException {
@@ -165,9 +178,9 @@ public class SeleniumExecuter {
 		options.addArguments("--no-sandbox");
 		options.addArguments("--disable-dev-shm-usage");
 
-//		WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+				WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
-						WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
+//		WebDriver webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
 		//        WebDriver webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
 
 		String baseUrl = "https://www.mercadolivre.com.br/";
@@ -210,10 +223,12 @@ public class SeleniumExecuter {
 
 			WebDriver webDriver = null;
 			try {
-								webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
-				//				webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"), options);
-//				webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
-				//                webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
+//				webDriver = new RemoteWebDriver(new URL("http://192.168.65.4:4444"), options);
+						//								webDriver = new RemoteWebDriver(new URL("http://172.17.0.4:4444"),
+
+						//								options);
+										webDriver = new RemoteWebDriver(new URL("http://172.17.0.2:4444"), options);
+						//                webDriver = new RemoteWebDriver(new URL("http://172.17.0.3:4444"), options);
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
