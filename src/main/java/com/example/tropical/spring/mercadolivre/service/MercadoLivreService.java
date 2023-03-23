@@ -36,7 +36,7 @@ public class MercadoLivreService {
 			mercadoLivreResponse.getResults().forEach(anuncio -> {
 				if (Boolean.TRUE.equals(isNotProdutoParecido(anuncio, product))) {
 					if (verifyIfIsOceanTech(anuncio.getAtributosDoAnuncio(), anuncio.getTituloDoAnuncio())) {
-						if (Boolean.TRUE.equals(isPriceBelowPMS(anuncio.getPrice(), product.getPrice()))) {
+						if (Boolean.TRUE.equals(validatePMS(anuncio.getPrice(), product.getPrice()))) {
 							var relatorioResponse = mapperToRelatorioResponse(mercadoLivreResponse, anuncio, product);
 							relatorio.add(relatorioResponse);
 						}
@@ -93,11 +93,28 @@ public class MercadoLivreService {
 
 	private static Boolean isNotAnotherBrand(String adTitleLowerCase) {
 		return !adTitleLowerCase.contains("aqua ocean") && !adTitleLowerCase.contains("aquaocean") &&
-				!adTitleLowerCase.contains("instant ocean") && !adTitleLowerCase.contains("instantocean");
+				!adTitleLowerCase.contains("instant ocean") && !adTitleLowerCase.contains("instantocean")
+				&& !adTitleLowerCase.contains("usado") && !adTitleLowerCase.contains("usada")
+				&& !adTitleLowerCase.startsWith("controlador") && !adTitleLowerCase.contains("grade")
+				&& !adTitleLowerCase.contains("impeller") && !adTitleLowerCase.contains("fonte");
 	}
 
-	private Boolean isPriceBelowPMS(Double adPrice, Double pms) {
+	private Boolean validatePMS(Double adPrice, Double pms) {
+		return isAdPriceBelowPMS(adPrice, pms) && isAdPriceHigherThanFiftyPercentOfPMS(adPrice, pms);
+	}
+
+	private Boolean isAdPriceBelowPMS(Double adPrice, Double pms) {
 		return adPrice.intValue() < pms.intValue();
+	}
+
+	private Boolean isAdPriceHigherThanFiftyPercentOfPMS(Double adPrice, Double pms) {
+
+		var halfPrice = pms.intValue() / 2;
+		var quarterPrice = halfPrice / 2;
+
+		var threeQuarterPrice = halfPrice + quarterPrice;
+
+		return adPrice.intValue() > threeQuarterPrice;
 	}
 
 	private List<AdSalesMLResponse> filterOtherBrands(List<AdSalesMLResponse> relatorio) {
