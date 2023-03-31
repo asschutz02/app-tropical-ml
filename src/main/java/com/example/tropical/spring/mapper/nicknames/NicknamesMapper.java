@@ -38,6 +38,11 @@ public interface NicknamesMapper {
             " WHERE  nickname=#{nickname};                                     " )
     void updateNickname(@Param("nick") NicknamesEntity nick, String nickname);
 
+    @Update(value = " UPDATE nicknames                                         " +
+            " SET    lojista=#{newLojista, jdbcType=VARCHAR}                   " +
+            " WHERE  lojista=#{oldLojista};                                    " )
+    void updateLojista(String newLojista, String oldLojista);
+
     @Delete("DELETE FROM nicknames WHERE nickname=#{nickname};")
     void deleteNickname(String nickname);
 }

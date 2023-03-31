@@ -2,6 +2,8 @@ package com.example.tropical.spring.service.lojistas;
 
 import com.example.tropical.spring.entity.lojistas.LojistasEntity;
 import com.example.tropical.spring.mapper.lojistas.LojistasMapper;
+import com.example.tropical.spring.mapper.nicknames.NicknamesMapper;
+
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import java.util.List;
 public class LojistaService {
 
     private final LojistasMapper lojistasMapper;
+    private final NicknamesMapper nicknamesMapper;
 
     public void insertLojista(LojistasEntity lojistas){
         lojistasMapper.insertLojista(lojistas);
@@ -27,5 +30,6 @@ public class LojistaService {
 
     public void updateLojista(LojistasEntity lojistas, String lojista){
         lojistasMapper.updateLojista(lojistas, lojista);
+        nicknamesMapper.updateLojista(lojistas.getLojista(), lojista);
     }
 }
