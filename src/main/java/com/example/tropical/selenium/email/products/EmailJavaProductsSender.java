@@ -39,17 +39,22 @@ public class EmailJavaProductsSender {
         Properties properties = System.getProperties();
 
         // Setup mail server
-        properties.put("mail.smtp.host", host);
-        properties.put("mail.smtp.port", "465");
-        properties.put("mail.smtp.ssl.enable", "true");
+//        properties.put("mail.smtp.host", host);
+//        properties.put("mail.smtp.port", "465");
+//        properties.put("mail.smtp.ssl.enable", "true");
+//        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.port", "587");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.ssl.trust", "*");
 
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
 
             protected PasswordAuthentication getPasswordAuthentication() {
 
                 return new PasswordAuthentication("arthurschutzdasilva@gmail.com",
-                        "rjalevyscnrdbswe");
+                        "dhazmdtclsuhadxf");
 
             }
 
