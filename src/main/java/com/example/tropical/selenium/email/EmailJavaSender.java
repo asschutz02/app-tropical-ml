@@ -25,9 +25,9 @@ public class EmailJavaSender {
 	public static void emailJavaSender() {
 
 		//         Recipient's email ID needs to be mentioned.
-//		        String to = "arthur.schutz123@gmail.com";
+		        String to = "arthur.schutz123@gmail.com";
 		//        String to = \"vendas@tropicalimport.com.br";
-		String to = "marcasregistradas@tropicalimport.com.br";
+//		String to = "marcasregistradas@tropicalimport.com.br";
 
 		// Sender's email ID needs to be mentioned
 		String from = "arthurschutzdasilva@gmail.com";
@@ -55,7 +55,8 @@ public class EmailJavaSender {
 			protected PasswordAuthentication getPasswordAuthentication() {
 
 				return new PasswordAuthentication("arthurschutzdasilva@gmail.com",
-						"dhazmdtclsuhadxf");
+//						"dhazmdtclsuhadxf");
+						System.getenv("gmail.password"));
 
 			}
 
