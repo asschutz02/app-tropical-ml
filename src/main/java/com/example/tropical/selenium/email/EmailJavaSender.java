@@ -55,7 +55,6 @@ public class EmailJavaSender {
 			protected PasswordAuthentication getPasswordAuthentication() {
 
 				return new PasswordAuthentication("arthurschutzdasilva@gmail.com",
-//						"dhazmdtclsuhadxf");
 						System.getenv("gmail.password"));
 
 			}

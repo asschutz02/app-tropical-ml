@@ -2,6 +2,7 @@ package com.example.tropical.spring.mercadolivre.service;
 
 import static com.example.tropical.selenium.email.EmailJavaSender.emailJavaSender;
 import static com.example.tropical.spring.mercadolivre.mapper.MercadoLivreMapper.mapperToRelatorioResponse;
+import static java.util.Objects.nonNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,16 +55,18 @@ public class MercadoLivreService {
 		var adTitle = mercadoLivreModel.getTituloDoAnuncio();
 
 		if (produtoParecido.isPresent() && produtoParecido.get().contains(" ")) {
-			String [] stringArray= produtoParecido.get().split(" ");
+			String[] stringArray = produtoParecido.get().split(" ");
 			List<String> nomesParecidos = List.of(stringArray);
 			return !nomesParecidos.stream().anyMatch(adTitle::contains);
-		} else if(produtoParecido.isPresent() && !produtoParecido.get().contains(" ")) {
+		} else if (produtoParecido.isPresent() && !produtoParecido.get().contains(" ")) {
 			return !adTitle.contains(produtoParecido.get());
 		} else {
 			return produtoParecido.isEmpty();
 		}
 	}
-	public static Boolean verifyIfIsOceanTech(List<MercadoLivreAtributosDoAnuncio> atributosDoAnuncio, String adTitle) {
+
+	public static Boolean verifyIfIsOceanTech(List<MercadoLivreAtributosDoAnuncio> atributosDoAnuncio,
+			String adTitle) {
 
 		String brand = "";
 
@@ -72,15 +75,16 @@ public class MercadoLivreService {
 				.map(MercadoLivreAtributosDoAnuncio::getMarca)
 				.collect(Collectors.toList());
 
-		if (!brandFilterList.isEmpty()) {
+		if (!brandFilterList.isEmpty() && nonNull(brandFilterList.get(0))) {
 			brand = brandFilterList.get(0);
+			String brandLowerCase = brand.toLowerCase();
+			String adTitleLowerCase = adTitle.toLowerCase();
+
+			return (isBrandEqualsOceanTech(brandLowerCase) || containsOceanInAdTitle(adTitleLowerCase))
+					&& isNotAnotherBrand(adTitleLowerCase);
+		} else {
+			return false;
 		}
-
-		String brandLowerCase = brand.toLowerCase();
-		String adTitleLowerCase = adTitle.toLowerCase();
-
-		return (isBrandEqualsOceanTech(brandLowerCase) || containsOceanInAdTitle(adTitleLowerCase))
-				&& isNotAnotherBrand(adTitleLowerCase);
 	}
 
 	private static Boolean isBrandEqualsOceanTech(String brandLowerCase) {
