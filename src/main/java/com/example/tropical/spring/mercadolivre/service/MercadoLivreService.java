@@ -36,9 +36,11 @@ public class MercadoLivreService {
 			var mercadoLivreResponse = client.searchProduct(product.getName());
 			mercadoLivreResponse.getResults().forEach(anuncio -> {
 				if (Boolean.TRUE.equals(isNotProdutoParecido(anuncio, product))) {
-					if (verifyIfIsOceanTech(anuncio.getAtributosDoAnuncio(), anuncio.getTituloDoAnuncio())) {
+					if (Boolean.TRUE.equals(
+							verifyIfIsOceanTech(anuncio.getAtributosDoAnuncio(), anuncio.getTituloDoAnuncio()))) {
 						if (Boolean.TRUE.equals(validatePMS(anuncio.getPrice(), product.getPrice()))) {
-							var relatorioResponse = mapperToRelatorioResponse(mercadoLivreResponse, anuncio, product);
+							var relatorioResponse = mapperToRelatorioResponse(mercadoLivreResponse, anuncio,
+									product);
 							relatorio.add(relatorioResponse);
 						}
 					}
@@ -100,7 +102,7 @@ public class MercadoLivreService {
 				!adTitleLowerCase.contains("instant ocean") && !adTitleLowerCase.contains("instantocean")
 				&& !adTitleLowerCase.contains("usado") && !adTitleLowerCase.contains("usada")
 				&& !adTitleLowerCase.startsWith("controlador") && !adTitleLowerCase.contains("grade")
-				&& !adTitleLowerCase.contains("impeller") && !adTitleLowerCase.contains("fonte");
+				&& !adTitleLowerCase.contains("impeller");
 	}
 
 	private Boolean validatePMS(Double adPrice, Double pms) {
