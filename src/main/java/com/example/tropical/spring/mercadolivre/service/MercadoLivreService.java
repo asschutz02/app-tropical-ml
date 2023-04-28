@@ -36,12 +36,14 @@ public class MercadoLivreService {
 			var mercadoLivreResponse = client.searchProduct(product.getName());
 			mercadoLivreResponse.getResults().forEach(anuncio -> {
 				if (Boolean.TRUE.equals(isNotProdutoParecido(anuncio, product))) {
-					if (Boolean.TRUE.equals(
-							verifyIfIsOceanTech(anuncio.getAtributosDoAnuncio(), anuncio.getTituloDoAnuncio()))) {
-						if (Boolean.TRUE.equals(validatePMS(anuncio.getPrice(), product.getPrice()))) {
-							var relatorioResponse = mapperToRelatorioResponse(mercadoLivreResponse, anuncio,
-									product);
-							relatorio.add(relatorioResponse);
+					if (isNotUsedProduct(anuncio.getCondition())) {
+						if (Boolean.TRUE.equals(
+								verifyIfIsOceanTech(anuncio.getAtributosDoAnuncio(), anuncio.getTituloDoAnuncio()))) {
+							if (Boolean.TRUE.equals(validatePMS(anuncio.getPrice(), product.getPrice()))) {
+								var relatorioResponse = mapperToRelatorioResponse(mercadoLivreResponse, anuncio,
+										product);
+								relatorio.add(relatorioResponse);
+							}
 						}
 					}
 				}
@@ -50,6 +52,10 @@ public class MercadoLivreService {
 		List<AdSalesMLResponse> relatorioFinal = filterOtherBrands(relatorio);
 		excelExecuter.createExcel(relatorioFinal);
 		emailJavaSender();
+	}
+
+	private Boolean isNotUsedProduct(String condition) {
+		return !condition.equals("used");
 	}
 
 	private Boolean isNotProdutoParecido(MercadoLivreModel mercadoLivreModel, ProductsEntity product) {

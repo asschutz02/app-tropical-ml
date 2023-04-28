@@ -29,4 +29,6 @@ public class MercadoLivreModel {
 
 	@JsonProperty("attributes")
 	private List<MercadoLivreAtributosDoAnuncio> atributosDoAnuncio;
+
+	private String condition;
 }
