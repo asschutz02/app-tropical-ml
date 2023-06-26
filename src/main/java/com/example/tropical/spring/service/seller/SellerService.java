@@ -18,7 +18,7 @@ public class SellerService {
     }
 
     public List<SellerEntity> findAll() {
-        return sellerMapper.findaAll();
+        return sellerMapper.findAll();
     }
 
     public void deleteSeller(String name){

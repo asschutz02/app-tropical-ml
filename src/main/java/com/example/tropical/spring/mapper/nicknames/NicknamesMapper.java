@@ -45,4 +45,7 @@ public interface NicknamesMapper {
 
     @Delete("DELETE FROM nicknames WHERE nickname=#{nickname};")
     void deleteNickname(String nickname);
+
+    @Select("SELECT * FROM nicknames WHERE lojista=#{lojista};")
+    List<NicknamesEntity> findByLojista(String lojista);
 }

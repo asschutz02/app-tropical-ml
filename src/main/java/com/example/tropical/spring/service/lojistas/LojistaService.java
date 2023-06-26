@@ -1,6 +1,7 @@
 package com.example.tropical.spring.service.lojistas;
 
 import com.example.tropical.spring.entity.lojistas.LojistasEntity;
+import com.example.tropical.spring.entity.nicknames.NicknamesEntity;
 import com.example.tropical.spring.mapper.lojistas.LojistasMapper;
 import com.example.tropical.spring.mapper.nicknames.NicknamesMapper;
 
@@ -21,10 +22,15 @@ public class LojistaService {
     }
 
     public List<LojistasEntity> findAll() {
-        return lojistasMapper.findaAll();
+        return lojistasMapper.findAll();
     }
 
     public void deleteLojista(String lojista){
+        List<NicknamesEntity> nicknamesRelateToLojista = nicknamesMapper.findByLojista(lojista);
+
+        if (!nicknamesRelateToLojista.isEmpty()) {
+            throw new RuntimeException();
+        }
         lojistasMapper.deleteByLojista(lojista);
     }
 

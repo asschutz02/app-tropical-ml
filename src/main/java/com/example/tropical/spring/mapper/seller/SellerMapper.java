@@ -14,7 +14,7 @@ public interface SellerMapper {
     void insertSeller(@Param("seller") SellerEntity seller);
 
     @Select("SELECT * FROM sellers")
-    List<SellerEntity> findaAll();
+    List<SellerEntity> findAll();
 
     @Delete("DELETE FROM sellers WHERE name=#{name};")
     void deleteByName(String name);

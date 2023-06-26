@@ -14,7 +14,7 @@ public interface LojistasMapper {
     void insertLojista(@Param("lojistas") LojistasEntity lojistas);
 
     @Select("SELECT * FROM lojistas")
-    List<LojistasEntity> findaAll();
+    List<LojistasEntity> findAll();
 
     @Delete("DELETE FROM lojistas WHERE lojista=#{lojista};")
     void deleteByLojista(String lojista);
