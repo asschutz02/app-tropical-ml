@@ -75,6 +75,7 @@ public class ExcelHelper {
 		celula = linha.createCell(5);
 		celula.setCellValue(adSalesMLResponse.getLinkAd());
 
+		// if link contains "/p/MLB" get the idAd from "catalog_product_id" attribute
 		celula = linha.createCell(6);
 		String linkAd = adSalesMLResponse.getLinkAd();
 		String MLB = linkAd.substring(36);

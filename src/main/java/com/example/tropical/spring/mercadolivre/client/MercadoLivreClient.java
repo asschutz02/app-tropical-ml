@@ -13,7 +13,9 @@ import com.example.tropical.spring.mercadolivre.model.MercadoLivreResponse;
 public class MercadoLivreClient {
 	private static final String BASE_URL = "https://api.mercadolibre.com/sites/MLB/search";
 	private static final String BASE_TOKEN = "Bearer ";
-	private static final String TOKEN = "APP_USR-6688446517137964-032112-f3aaa445c419c905f9d179b6ced95e91-1335584154";
+//	private static final String TOKEN = "APP_USR-6688446517137964-032112-f3aaa445c419c905f9d179b6ced95e91-1335584154";
+	private static final String TOKEN = "APP_USR-7056842339787742-012819-7f779fc0e84b7ef04b67baf9bb3888c9-1335584154";
+//	refreshToken = TG-65b6e6390787a400019abb73-1335584154
 
 	RestTemplate restTemplate = new RestTemplate();
 
