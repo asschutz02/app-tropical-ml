@@ -22,6 +22,9 @@ public class MercadoLivreModel {
 
 	private Double price;
 
+	@JsonProperty("original_price")
+	private Double originalPrice;
+
 	private MercadoLivreSeller seller;
 
 	@JsonProperty("permalink")

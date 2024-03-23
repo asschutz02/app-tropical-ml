@@ -25,6 +25,7 @@ public class ExcelHelper {
 		titulos.add("LINK DO ANÚNCIO");
 		titulos.add("ID DO ANÚNCIO");
 		titulos.add("VALOR ANUNCIADO");
+		titulos.add("PREÇO ORIGINAL DO ANÚNCIO");
 		titulos.add("NICKNAME");
 		titulos.add("LOJISTA");
 		if (!Objects.isNull(vendedor)) {
@@ -75,20 +76,19 @@ public class ExcelHelper {
 		celula = linha.createCell(5);
 		celula.setCellValue(adSalesMLResponse.getLinkAd());
 
-		// if link contains "/p/MLB" get the idAd from "catalog_product_id" attribute
 		celula = linha.createCell(6);
-		String linkAd = adSalesMLResponse.getLinkAd();
-		String MLB = linkAd.substring(36);
-		String idAD = MLB.substring(0, 14);
-		celula.setCellValue(idAD);
+		celula.setCellValue(adSalesMLResponse.getIdAd());
 
 		celula = linha.createCell(7);
 		celula.setCellValue(adSalesMLResponse.getPrice());
 
 		celula = linha.createCell(8);
-		celula.setCellValue(adSalesMLResponse.getNickNameSeller().toUpperCase());
+		celula.setCellValue(adSalesMLResponse.getOriginalPrice());
 
 		celula = linha.createCell(9);
+		celula.setCellValue(adSalesMLResponse.getNickNameSeller().toUpperCase());
+
+		celula = linha.createCell(10);
 		if (Objects.isNull(lojista)) {
 			celula.setCellValue(lojista);
 		} else {
@@ -96,7 +96,7 @@ public class ExcelHelper {
 		}
 
 		if (!Objects.isNull(vendedor)) {
-			celula = linha.createCell(10);
+			celula = linha.createCell(11);
 			celula.setCellValue(vendedor);
 		}
 	}
