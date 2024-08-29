@@ -15,9 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.tropical.selenium.model.AdSalesMLResponse;
 import com.example.tropical.spring.entity.nicknames.NicknamesEntity;
-import com.example.tropical.spring.entity.seller.SellerEntity;
 import com.example.tropical.spring.mapper.nicknames.NicknamesMapper;
-import com.example.tropical.spring.mapper.seller.SellerMapper;
 
 import lombok.AllArgsConstructor;
 
@@ -30,7 +28,7 @@ public final class ExcelExecuter {
 	public void createExcel(List<AdSalesMLResponse> relatorio) throws IOException {
 		XSSFWorkbook workbook = new XSSFWorkbook();
 
-		List<NicknamesEntity> nicknames = this.nicknamesMapper.findaAll();
+		List<NicknamesEntity> nicknames = this.nicknamesMapper.findAll();
 		//		List<SellerEntity> sellers = this.sellerMapper.findaAll();
 		//
 		//		sellers.forEach(seller -> workbook.createSheet(seller.getName()));

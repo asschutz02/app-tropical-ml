@@ -27,7 +27,7 @@ public class NicknamesService {
     }
 
     public List<NicknamesEntity> findAll(){
-        return nicknamesMapper.findaAll();
+        return nicknamesMapper.findAll();
     }
 
     public NicknamesEntity findByNickname(String nickname){

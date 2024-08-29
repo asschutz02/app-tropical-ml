@@ -24,7 +24,7 @@ public class ExcelNickname {
     public void createExcelNickname() {
         XSSFWorkbook workbook = new XSSFWorkbook();
 
-        List<NicknamesEntity> allNicks = nicknamesMapper.findaAll();
+        List<NicknamesEntity> allNicks = nicknamesMapper.findAll();
 
         XSSFSheet nicksPage = workbook.createSheet("NICKNAMES");
         allNicks.forEach(nick -> populateExcelNickname(nicksPage, nick));

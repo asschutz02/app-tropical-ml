@@ -27,11 +27,19 @@ public class LojistaController {
 
     @DeleteMapping("/{lojista}")
     public void deleteLojista(@PathVariable String lojista){
-        lojistaService.deleteLojista(lojista);
+        var lojistaToDelete = lojista;
+        if (lojistaToDelete.contains("!")) {
+            lojistaToDelete = lojista.replace("!", "/");
+        }
+        lojistaService.deleteLojista(lojistaToDelete);
     }
 
     @PutMapping("/{lojista}")
-    public void updateLojista(@RequestBody LojistasEntity lojistas, @PathVariable String lojista){
-        lojistaService.updateLojista(lojistas, lojista);
+    public void updateLojista(@RequestBody LojistasEntity lojistas, @PathVariable String lojista) {
+        var lojistaToEdit = lojista;
+        if (lojistaToEdit.contains("!")) {
+            lojistaToEdit = lojista.replace("!", "/");
+        }
+        lojistaService.updateLojista(lojistas, lojistaToEdit);
     }
 }

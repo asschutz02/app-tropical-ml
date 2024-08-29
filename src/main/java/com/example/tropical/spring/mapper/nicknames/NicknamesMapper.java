@@ -25,7 +25,7 @@ public interface NicknamesMapper {
 
     @Select("SELECT * FROM nicknames")
     @Result(property = "customerBy", column = "customer_by")
-    List<NicknamesEntity> findaAll();
+    List<NicknamesEntity> findAll();
 
     @Select("SELECT * FROM nicknames WHERE nickname=#{nickname};")
     @Result(property = "customerBy", column = "customer_by")
