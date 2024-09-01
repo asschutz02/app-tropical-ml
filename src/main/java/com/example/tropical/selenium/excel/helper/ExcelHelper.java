@@ -77,7 +77,11 @@ public class ExcelHelper {
 		celula.setCellValue(adSalesMLResponse.getLinkAd());
 
 		celula = linha.createCell(6);
-		celula.setCellValue(adSalesMLResponse.getIdAd());
+		var idDoAnuncio = adSalesMLResponse.getIdAd();
+		if (adSalesMLResponse.getIdAd().contains("#wid=")) {
+			idDoAnuncio = adSalesMLResponse.getIdAd().replace("#wid=", "");
+		}
+		celula.setCellValue(idDoAnuncio);
 
 		celula = linha.createCell(7);
 		celula.setCellValue(adSalesMLResponse.getPrice());
