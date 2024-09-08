@@ -38,7 +38,7 @@ public class MercadoLivreService {
 				if (Boolean.TRUE.equals(isNotProdutoParecido(anuncio, product))) {
 					if (isNotUsedProduct(anuncio.getCondition())) {
 						if (Boolean.TRUE.equals(
-								verifyIfIsOceanTech(anuncio.getAtributosDoAnuncio(), anuncio.getTituloDoAnuncio()))) {
+								verifyIfIsOceanTechOrTropical(anuncio.getAtributosDoAnuncio(), anuncio.getTituloDoAnuncio()))) {
 							if (Boolean.TRUE.equals(validatePMS(anuncio.getPrice(), product.getPrice()))) {
 								var relatorioResponse = mapperToRelatorioResponse(mercadoLivreResponse, anuncio,
 										product);
@@ -73,8 +73,7 @@ public class MercadoLivreService {
 		}
 	}
 
-	public static Boolean verifyIfIsOceanTech(List<MercadoLivreAtributosDoAnuncio> atributosDoAnuncio,
-			String adTitle) {
+	public static Boolean verifyIfIsOceanTechOrTropical(List<MercadoLivreAtributosDoAnuncio> atributosDoAnuncio, String adTitle) {
 
 		String brand = "";
 
@@ -88,19 +87,19 @@ public class MercadoLivreService {
 			String brandLowerCase = brand.toLowerCase();
 			String adTitleLowerCase = adTitle.toLowerCase();
 
-			return (isBrandEqualsOceanTech(brandLowerCase) || containsOceanInAdTitle(adTitleLowerCase))
+			return (isBrandEqualsOceanTechOrTropical(brandLowerCase) || containsOceanOrTropicalInAdTitle(adTitleLowerCase))
 					&& isNotAnotherBrand(adTitleLowerCase);
 		} else {
 			return false;
 		}
 	}
 
-	private static Boolean isBrandEqualsOceanTech(String brandLowerCase) {
-		return brandLowerCase.equals("ocean tech") || brandLowerCase.equals("oceantech");
+	private static Boolean isBrandEqualsOceanTechOrTropical(String brandLowerCase) {
+		return brandLowerCase.equals("ocean tech") || brandLowerCase.equals("oceantech") || brandLowerCase.equals("tropical");
 	}
 
-	public static Boolean containsOceanInAdTitle(String adTitleLowerCase) {
-		return adTitleLowerCase.contains("ocean");
+	public static Boolean containsOceanOrTropicalInAdTitle(String adTitleLowerCase) {
+		return adTitleLowerCase.contains("ocean") || adTitleLowerCase.contains("tropical");
 	}
 
 	private static Boolean isNotAnotherBrand(String adTitleLowerCase) {
