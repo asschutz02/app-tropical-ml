@@ -19,7 +19,7 @@ public final class MercadoLivreMapper {
 			MercadoLivreModel anuncio, ProductsEntity productEntity) {
 		AdSalesMLResponse adSalesMLResponse = new AdSalesMLResponse();
 
-		adSalesMLResponse.setProductName(mercadoLivreResponse.getProdutoPesquisado());
+		adSalesMLResponse.setProductName(productEntity.getName());
 		adSalesMLResponse.setAdTitle(anuncio.getTituloDoAnuncio());
 		adSalesMLResponse.setLinkSeller(anuncio.getSeller().getLinkDoAnunciante());
 		adSalesMLResponse.setLinkAd(anuncio.getLinkDoAnuncio());
