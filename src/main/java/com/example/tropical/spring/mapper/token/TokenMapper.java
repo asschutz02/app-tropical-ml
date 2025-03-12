@@ -16,7 +16,7 @@ public interface TokenMapper {
 
 	@Update(value = " UPDATE tokens                                                  " +
 			" SET    token=#{tokenModel.accessToken, jdbcType=VARCHAR},              " +
-			"        refresh_token=#{tokenModel.refreshToken, jdbcType=VARCHAR},     " +
+			"        refresh_token=#{tokenModel.refreshToken, jdbcType=VARCHAR}     " +
 			" WHERE  token=#{token};                                                 " )
 	void updateToken(@Param("tokenModel") TokenModelResponse tokenModel, String token);
 
