@@ -33,7 +33,11 @@ public class ProductsController {
     @PutMapping("/{name}")
     public void updateProduct(@RequestBody ProductsEntity products,
                               @PathVariable String name){
-        productsService.updateProduct(products, name);
+        var productToEdit = name;
+        if (productToEdit.contains("!")) {
+            productToEdit = name.replace("!", "%");
+        }
+        productsService.updateProduct(products, productToEdit);
     }
 
     @DeleteMapping("/{name}")
