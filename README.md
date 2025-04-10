@@ -1,6 +1,7 @@
 O SISTEMA:
   - 
   - Gerenciador de preços de produtos anunciados por clientes da tropical no Mercado Livre, onde produtos anunciados abaixo do PMS (Preço Mínimo Sugerido), são incluidos no relatório e enviados por email
+  - Java 11
 
 ---------
 ## 1. Deploy
