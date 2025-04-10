@@ -25,9 +25,6 @@ public class MercadoLivreClient {
 	private final RestTemplate restTemplate;
 	private static final String BASE_URL = "https://api.mercadolibre.com/sites/MLB/search";
 	private static final String BASE_TOKEN = "Bearer ";
-//	private static final String TOKEN = "APP_USR-6688446517137964-032112-f3aaa445c419c905f9d179b6ced95e91-1335584154";
-	private static final String TOKEN = "APP_USR-7056842339787742-020518-f3dda08a81aaaf563f6665";
-//	refreshToken = TG-65c15d1183edf800019d0d19-1335584154
 
 	public MercadoLivreResponse searchProduct(String productName) {
 		try {

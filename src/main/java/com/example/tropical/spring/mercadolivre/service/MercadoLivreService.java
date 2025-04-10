@@ -1,10 +1,9 @@
 package com.example.tropical.spring.mercadolivre.service;
 
-import static com.example.tropical.selenium.email.EmailJavaSender.emailJavaSender;
+import static com.example.tropical.spring.email.EmailJavaSender.emailJavaSender;
 import static com.example.tropical.spring.mercadolivre.mapper.MercadoLivreMapper.mapperToRelatorioResponse;
 import static java.util.Objects.nonNull;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -12,8 +11,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.example.tropical.selenium.excel.ExcelExecuter;
-import com.example.tropical.selenium.model.AdSalesMLResponse;
+import com.example.tropical.spring.excel.ExcelExecuter;
+import com.example.tropical.spring.model.AdSalesMLResponse;
 import com.example.tropical.spring.entity.products.ProductsEntity;
 import com.example.tropical.spring.mercadolivre.client.MercadoLivreClient;
 import com.example.tropical.spring.mercadolivre.model.MercadoLivreAtributosDoAnuncio;
@@ -28,7 +27,7 @@ public class MercadoLivreService {
 	private final MercadoLivreClient client;
 	private final ExcelExecuter excelExecuter;
 
-	public void searchProduct(List<ProductsEntity> productsEntities) throws IOException {
+	public void searchProduct(List<ProductsEntity> productsEntities) {
 		List<AdSalesMLResponse> relatorio = new ArrayList<>();
 
 		productsEntities.forEach(product -> {

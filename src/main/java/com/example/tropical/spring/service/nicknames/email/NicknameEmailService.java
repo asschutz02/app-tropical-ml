@@ -1,10 +1,10 @@
 package com.example.tropical.spring.service.nicknames.email;
 
-import com.example.tropical.selenium.excel.nickname.ExcelNickname;
+import com.example.tropical.spring.excel.nickname.ExcelNickname;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.example.tropical.selenium.email.nickname.EmailJavaNicknameSender.emailJavaNicknameSender;
+import static com.example.tropical.spring.service.nicknames.email.EmailJavaNicknameSender.emailJavaNicknameSender;
 
 @Service
 @AllArgsConstructor

@@ -4,7 +4,7 @@ import static java.util.Objects.nonNull;
 
 import java.util.List;
 
-import com.example.tropical.selenium.model.AdSalesMLResponse;
+import com.example.tropical.spring.model.AdSalesMLResponse;
 import com.example.tropical.spring.entity.products.ProductsEntity;
 import com.example.tropical.spring.mercadolivre.model.MercadoLivreModel;
 import com.example.tropical.spring.mercadolivre.model.MercadoLivreResponse;

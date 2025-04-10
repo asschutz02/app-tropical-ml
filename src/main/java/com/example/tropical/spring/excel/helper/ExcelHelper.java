@@ -1,4 +1,4 @@
-package com.example.tropical.selenium.excel.helper;
+package com.example.tropical.spring.excel.helper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
-import com.example.tropical.selenium.model.AdSalesMLResponse;
+import com.example.tropical.spring.model.AdSalesMLResponse;
 
 public class ExcelHelper {
 

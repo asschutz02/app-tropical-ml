@@ -1,4 +1,4 @@
-package com.example.tropical.selenium.decorator;
+package com.example.tropical.spring.service.search.decorator;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

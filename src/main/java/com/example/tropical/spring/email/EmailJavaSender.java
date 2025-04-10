@@ -1,4 +1,4 @@
-package com.example.tropical.selenium.email;
+package com.example.tropical.spring.email;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,24 +25,15 @@ public class EmailJavaSender {
 	public static void emailJavaSender() {
 
 		//         Recipient's email ID needs to be mentioned.
-//		        String to = "arthur.schutz123@gmail.com";
-		//        String to = \"vendas@tropicalimport.com.br";
 		String to = "marcasregistradas@tropicalimport.com.br";
 
 		// Sender's email ID needs to be mentioned
 		String from = "arthurschutzdasilva@gmail.com";
 
-		// Assuming you are sending email from through gmails smtp
-		String host = "smtp.gmail.com";
-
 		// Get system properties
 		Properties properties = System.getProperties();
 
 		// Setup mail server
-//		properties.put("mail.smtp.host", host);
-//		properties.put("mail.smtp.port", "465");
-//		properties.put("mail.smtp.ssl.enable", "true");
-//		properties.put("mail.smtp.auth", "true");
 		properties.put("mail.smtp.host", "smtp.gmail.com");
 		properties.put("mail.smtp.auth", "true");
 		properties.put("mail.smtp.port", "587");
@@ -56,7 +47,6 @@ public class EmailJavaSender {
 
 				return new PasswordAuthentication("arthurschutzdasilva@gmail.com",
 						System.getenv("gmail.password"));
-
 			}
 
 		});
@@ -68,7 +58,6 @@ public class EmailJavaSender {
 			message.setFrom(new InternetAddress(from));
 
 			// Set To: header field of the header.
-			//            message.addRecipients(Message.RecipientType.TO, String.valueOf(to));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
 			// Set Subject: header field

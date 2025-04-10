@@ -14,6 +14,7 @@ public class SearchController {
 
     private final SearchService service;
 
+    @Deprecated
     @GetMapping("/{productName}/price/{price}")
     public void searchProduct(@PathVariable String productName, @PathVariable Double price) throws IOException {
         service.searchProduct(productName, price);

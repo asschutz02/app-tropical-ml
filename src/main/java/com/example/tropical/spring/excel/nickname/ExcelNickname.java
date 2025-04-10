@@ -1,4 +1,4 @@
-package com.example.tropical.selenium.excel.nickname;
+package com.example.tropical.spring.excel.nickname;
 
 import com.example.tropical.spring.entity.nicknames.NicknamesEntity;
 import com.example.tropical.spring.mapper.nicknames.NicknamesMapper;
@@ -28,62 +28,7 @@ public class ExcelNickname {
 
         XSSFSheet nicksPage = workbook.createSheet("NICKNAMES");
         allNicks.forEach(nick -> populateExcelNickname(nicksPage, nick));
-//        XSSFSheet maciel = workbook.createSheet("MACIEL");
-//        XSSFSheet paola = workbook.createSheet("PAOLA");
-//        XSSFSheet rodrigoReis = workbook.createSheet("RODRIGO REIS");
-//        XSSFSheet eleandro = workbook.createSheet("ELEANDRO");
-//        XSSFSheet thomas = workbook.createSheet("THOMAS");
-//        XSSFSheet diego = workbook.createSheet("DIEGO");
-//        XSSFSheet willian = workbook.createSheet("WILLIAN");
-//        XSSFSheet cesar = workbook.createSheet("CÉSAR");
-//        XSSFSheet patrick = workbook.createSheet("PATRICK");
-//        XSSFSheet augusto = workbook.createSheet("AUGUSTO");
-//        XSSFSheet carlosEduardo = workbook.createSheet("CARLOS EDUARDO");
-//        XSSFSheet rafael = workbook.createSheet("RAFAEL");
 
-//        allNicks.forEach(nick -> {
-//            switch (nick.getCustomerBy().toLowerCase()) {
-//                case "eveline":
-//                    populateExcelNickname(eveline, nick);
-//                    break;
-//                case "maciel":
-//                    populateExcelNickname(maciel, nick);
-//                    break;
-//                case "paola":
-//                    populateExcelNickname(paola, nick);
-//                    break;
-//                case "rodrigo reis":
-//                    populateExcelNickname(rodrigoReis, nick);
-//                    break;
-//                case "eleandro":
-//                    populateExcelNickname(eleandro, nick);
-//                    break;
-//                case "thomas":
-//                    populateExcelNickname(thomas, nick);
-//                    break;
-//                case "diego":
-//                    populateExcelNickname(diego, nick);
-//                    break;
-//                case "willian":
-//                    populateExcelNickname(willian, nick);
-//                    break;
-//                case "cesar":
-//                    populateExcelNickname(cesar, nick);
-//                    break;
-//                case "patrick":
-//                    populateExcelNickname(patrick, nick);
-//                    break;
-//                case "augusto":
-//                    populateExcelNickname(augusto, nick);
-//                    break;
-//                case "carlos eduardo":
-//                    populateExcelNickname(carlosEduardo, nick);
-//                    break;
-//                case "rafael":
-//                    populateExcelNickname(rafael, nick);
-//                    break;
-//            }
-//        });
         FileOutputStream out = null;
         try {
             out = new FileOutputStream("nicknames-tropical-ml.xlsx");

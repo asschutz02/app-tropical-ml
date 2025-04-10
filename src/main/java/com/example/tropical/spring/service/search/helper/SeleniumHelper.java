@@ -1,22 +1,19 @@
-package com.example.tropical.selenium.helper;
+package com.example.tropical.spring.service.search.helper;
 
-import static com.example.tropical.selenium.finder.SeleniumFinder.primeiroBotaoSeguinte;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.money.CurrencyUnit;
-import javax.money.MonetaryAmount;
-
+import com.example.tropical.spring.model.AdSalesMLResponse;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.javamoney.moneta.Money;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import com.example.tropical.selenium.model.AdSalesMLResponse;
+import javax.money.CurrencyUnit;
+import javax.money.MonetaryAmount;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import static com.example.tropical.spring.service.search.finder.SeleniumFinder.primeiroBotaoSeguinte;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SeleniumHelper {

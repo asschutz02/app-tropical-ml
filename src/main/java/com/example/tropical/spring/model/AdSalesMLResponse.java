@@ -1,4 +1,4 @@
-package com.example.tropical.selenium.model;
+package com.example.tropical.spring.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

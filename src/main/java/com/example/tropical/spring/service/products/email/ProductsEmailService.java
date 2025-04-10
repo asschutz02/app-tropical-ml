@@ -1,10 +1,10 @@
 package com.example.tropical.spring.service.products.email;
 
-import com.example.tropical.selenium.excel.product.ExcelProduct;
+import com.example.tropical.spring.excel.product.ExcelProduct;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.example.tropical.selenium.email.products.EmailJavaProductsSender.emailJavaProductSender;
+import static com.example.tropical.spring.service.products.email.EmailJavaProductsSender.emailJavaProductSender;
 
 @Service
 @AllArgsConstructor

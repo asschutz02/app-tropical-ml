@@ -1,5 +1,12 @@
-package com.example.tropical.selenium.email.nickname;
+package com.example.tropical.spring.service.products.email;
 
+import org.springframework.stereotype.Component;
+
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -7,49 +14,28 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-
-import org.springframework.stereotype.Component;
-
 @Component
-public class EmailJavaNicknameSender {
+public class EmailJavaProductsSender {
 
-    public static void emailJavaNicknameSender() {
+    public static void emailJavaProductSender() {
         // Recipient's email ID needs to be mentioned.
-//                String to = "arthur.schutz123@gmail.com";
-//        String to = "vendas@tropicalimport.com.br";
         String to = "marcasregistradas@tropicalimport.com.br";
 
         // Sender's email ID needs to be mentioned
         String from = "arthurschutzdasilva@gmail.com";
 
         // Assuming you are sending email from through gmails smtp
-        String host = "smtp.gmail.com";
 
         // Get system properties
         Properties properties = System.getProperties();
 
         // Setup mail server
-//        properties.put("mail.smtp.host", host);
-//        properties.put("mail.smtp.port", "465");
-//        properties.put("mail.smtp.ssl.enable", "true");
-//        properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.port", "587");
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.ssl.trust", "*");
 
-        // Get the Session object.// and pass
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
 
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -60,7 +46,7 @@ public class EmailJavaNicknameSender {
             }
 
         });
-//session.setDebug(true);
+
         try {
             // Create a default MimeMessage object.
             MimeMessage message = new MimeMessage(session);
@@ -75,7 +61,7 @@ public class EmailJavaNicknameSender {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
             LocalDateTime now = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
             String dataFormatada = now.format(formatter);
-            message.setSubject("Planilha Nicknames Tropical - " + dataFormatada);
+            message.setSubject("Planilha Produtos Tropical - " + dataFormatada);
 
             Multipart multipart = new MimeMultipart();
 
@@ -85,7 +71,7 @@ public class EmailJavaNicknameSender {
 
             try {
 
-                File f =new File("nicknames-tropical-ml.xlsx");
+                File f =new File("produtos-tropical-ml.xlsx");
 
                 attachmentPart.attachFile(f);
                 textPart.setText("Segue em anexo planilha");

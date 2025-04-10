@@ -20,13 +20,10 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/tropical/relatorio")
 public class RelatorioController {
 
-//    private final RelatorioService service;
-
     private final MercadoLivreService mercadoLivreService;
 
     @PatchMapping()
     public void gerarRelatorio(@RequestBody List<ProductsEntity> productsEntities) throws IOException {
         mercadoLivreService.searchProduct(productsEntities);
-//        this.service.gerarRelatorio(productsEntities);
     }
 }
